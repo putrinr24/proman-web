@@ -1,0 +1,25 @@
+<div class="not-found-container text-center">
+  <ng-container *ngIf="icon; else defaultIcon">
+    <fa-icon [icon]="icon" class="not-found-icon"></fa-icon>
+  </ng-container>
+  <ng-template #defaultIcon>
+    <svg
+      class="not-found-icon mx-auto mb-2"
+      xmlns="http://www.w3.org/2000/svg"
+      width="64"
+      height="64"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="#999">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        d="M9.75 9.75h4.5M9.75 13.5h2.25M3.75 6v12a2.25 2.25 0 002.25 2.25h12a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25h-12A2.25 2.25 0 003.75 6z" />
+    </svg>
+  </ng-template>
+
+  <p class="not-found-text text-sm text-gray-500">
+    {{ text || 'No data found' }}
+  </p>
+</div>

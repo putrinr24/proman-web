@@ -1,0 +1,130 @@
+<div class="@container p-3">
+  <div class="mb-8 flex flex-col gap-10">
+    <div class="space-y-4">
+      <div class="flex flex-col">
+        <div class="flex w-full flex-row items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <h1 class="text-sm font-bold text-black uppercase">
+              Sale Payment Detail
+            </h1>
+            <span
+              class="rounded-full px-3 py-1 text-xs font-medium"
+              [ngClass]="{
+                'bg-yellow-100 text-yellow-600': salePayment.status === 0,
+                'bg-green-100 text-green-600': salePayment.status === 1,
+                'bg-red-100 text-red-600': salePayment.status === 2,
+              }">
+              {{ salePayment.status_label }}
+            </span>
+          </div>
+
+          <div class="flex gap-1">
+            <ng-container *ngFor="let button of actionButtons">
+              <button
+                type="button"
+                class="btn-high flex cursor-pointer rounded-md border border-gray-400 p-1 hover:bg-gray-100"
+                [pTooltip]="button.label"
+                (click)="button.action()">
+                <fc-svg-loader
+                  [path]="button.icon"
+                  [className]="'[&>svg]:size-4 text-gray-400'"></fc-svg-loader>
+              </button>
+            </ng-container>
+          </div>
+        </div>
+
+        <div
+          *ngIf="salePayment.status === 0"
+          class="bg-tertiary-50 mt-2 flex w-full flex-wrap gap-2 rounded-lg p-2">
+          <ng-container *ngFor="let btn of statusButtons">
+            <button
+              *ngIf="!btn.hidden"
+              type="button"
+              class="bg-tertiary-100 hover:bg-tertiary-200 flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs text-black transition"
+              (click)="btn.action()">
+              <fc-svg-loader
+                [path]="btn.icon"
+                [className]="'[&>svg]:size-3 fill-black'">
+              </fc-svg-loader>
+              {{ btn.label }}
+            </button>
+          </ng-container>
+        </div>
+      </div>
+
+      <div
+        class="ring-tertiary-200 mb-4 space-y-4 rounded-md bg-white p-4 text-sm text-gray-700 shadow-sm ring-1">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-700">
+            Payment for Invoice
+            <ng-container *ngIf="salePayment?.sale_invoice">
+              <a
+                class="break-words hover:text-sky-600 hover:underline"
+                [routerLink]="[
+                  '/sale-invoice/view',
+                  salePayment.sale_invoice.id,
+                ]">
+                {{ salePayment.sale_invoice.invoice_no }}
+              </a>
+            </ng-container>
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6">
+          <div class="space-y-2">
+            <div
+              class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+              <div class="text-gray-500">Payment Date</div>
+              <div>:</div>
+              <div class="break-words">
+                <span class="block sm:inline">
+                  {{ salePayment.date | date: 'd MMM y' }}
+                </span>
+                <span class="block sm:inline">
+                  {{ salePayment.date | date: 'hh:mm a' }}
+                </span>
+              </div>
+            </div>
+
+            <div
+              class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+              <div class="text-gray-500">Payment Method</div>
+              <div>:</div>
+              <div class="break-words">
+                {{ salePayment.payment_method_label }}
+              </div>
+            </div>
+
+            <ng-container
+              class="flex items-start gap-4"
+              *ngIf="salePayment.payment_method_label === 'Manual'">
+              <div
+                class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+                <div class="text-gray-500">Payment Proof</div>
+                <div>:</div>
+                <div
+                  class="h-12 w-12 rounded-md border border-gray-300 bg-white p-1">
+                  <fc-image-preview
+                    [preview]="true"
+                    [src]="salePayment.url"
+                    alt="Payment Proof"
+                    class="[&>.img]:object-cover">
+                  </fc-image-preview>
+                </div>
+              </div>
+            </ng-container>
+
+            <div
+              class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+              <div class="text-gray-500">Amount Paid</div>
+              <div>:</div>
+              <div class="break-words">
+                {{ salePayment.total | fcCurrency }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<div class="@container p-3">
+  <div class="mb-8 flex flex-col gap-4">
+    <div class="text-sm font-bold text-black uppercase">Create New User</div>
+    <form
+      [formGroup]="userForm"
+      class="grid w-full gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <fc-input-text
+        title="Name"
+        formControlName="name"
+        placeholder="Enter Name" />
+      <fc-select-option
+        [options]="userRoles"
+        [optionValue]="'id'"
+        [optionLabel]="'name'"
+        formControlName="role"
+        title="Role"
+        [desktopView]="'overlay'"
+        [mobileView]="'dialog'"
+        [placeholder]="'Select Role'"
+        [searchable]="true"
+        class="flex-1" />
+      <fc-input-tel
+        title="Phone Number"
+        formControlName="phone_no"
+        placeholder="Enter Phone Number" />
+      <fc-input-text
+        title="Email"
+        formControlName="email"
+        placeholder="Enter Email" />
+      <fc-input-text
+        type="username"
+        title="Username"
+        formControlName="username"
+        placeholder="Enter Username" />
+      <fc-input-text
+        type="password"
+        title="Password"
+        formControlName="password"
+        placeholder="Enter Password" />
+      <div class="col-span-1 md:col-span-2 lg:col-span-3">
+        <fc-textarea
+          placeholder="Enter Address"
+          formControlName="address"
+          title="Address"
+          [rows]="3"></fc-textarea>
+      </div>
+    </form>
+    <div class="mt-4 flex justify-end gap-3">
+      <button
+        class="flex cursor-pointer items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+        (click)="submit()">
+        Submit
+      </button>
+    </div>
+  </div>
+</div>

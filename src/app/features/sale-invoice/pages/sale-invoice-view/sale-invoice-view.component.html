@@ -1,0 +1,524 @@
+<div class="@container p-3">
+  <p-tabView [(activeIndex)]="activeTabIndex">
+    <p-tabPanel header="Overview">
+      <div
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+        *ngIf="showLottie">
+        <div
+          class="relative mx-auto aspect-square w-3/4 max-w-xs md:max-w-md lg:max-w-lg">
+          <ng-lottie
+            [options]="lottieOption"
+            (animationCreated)="animationCreated($event)"></ng-lottie>
+        </div>
+      </div>
+      <div class="mb-8 flex flex-col gap-10">
+        <!-- Sale Invoice Information -->
+        <div class="space-y-4">
+          <div class="flex flex-col">
+            <div
+              class="flex w-full flex-row items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <h1 class="text-sm font-bold text-black uppercase">
+                  Sale Invoice Detail
+                </h1>
+                <span
+                  class="rounded-full px-3 py-1 text-xs font-medium"
+                  [ngClass]="{
+                    'bg-yellow-100 text-yellow-600': saleInvoice.status === 0,
+                    'bg-orange-100 text-orange-600': saleInvoice.status === 1,
+                    'bg-green-100 text-green-600': saleInvoice.status === 2,
+                    'bg-red-100 text-red-600': saleInvoice.status === 3,
+                  }">
+                  {{ saleInvoice.status_label }}
+                </span>
+              </div>
+              <div class="flex gap-1">
+                <ng-container *ngFor="let button of actionButtons">
+                  <button
+                    *ngIf="
+                      button.roles.includes(authUser.role) &&
+                      (button.id !== 2 ||
+                        (saleInvoice.status === 0 && salePayments.length === 0))
+                    "
+                    type="button"
+                    class="btn-high flex cursor-pointer rounded-md border border-gray-400 p-1 hover:bg-gray-100"
+                    [pTooltip]="button.label"
+                    (click)="button.action()">
+                    <fc-svg-loader
+                      [path]="button.icon"
+                      [className]="
+                        '[&>svg]:size-4 text-gray-400'
+                      "></fc-svg-loader>
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+          <ng-container *ngIf="authUser.role === 0; else infoView">
+            <form
+              [formGroup]="saleInvoiceForm"
+              class="grid w-full gap-3 md:grid-cols-2">
+              <div class="grid w-full gap-3 md:col-span-2 md:grid-cols-3">
+                <fc-input-text
+                  title="Invoice Number"
+                  formControlName="invoice_no"
+                  [readonly]="true" />
+
+                <fc-datepicker
+                  title="Invoice Date"
+                  formControlName="date"
+                  [placeholder]="'Select Date'"
+                  [readonly]="
+                    saleInvoice.status !== 0 ||
+                    (saleInvoice.status === 0 && (salePayments.length || 0) > 0)
+                  ">
+                </fc-datepicker>
+
+                <div
+                  class="form-input border-tertiary-300 flex cursor-pointer items-center rounded-lg border px-1 py-2"
+                  [ngClass]="{
+                    'hover:bg-tertiary-100':
+                      saleInvoice.status === 0 &&
+                      (salePayments.length || 0) === 0,
+                  }">
+                  <div
+                    class="flex flex-1 flex-col p-1"
+                    (click)="
+                      saleInvoice.status === 0 &&
+                      (salePayments.length || 0) === 0
+                        ? onSelectProject()
+                        : null
+                    ">
+                    <p class="text-2xs font-medium text-gray-700">
+                      Project
+                      <span
+                        *ngIf="isRequired('project_id')"
+                        class="text-error-500"
+                        >*</span
+                      >
+                    </p>
+                    <p *ngIf="selectedProject" class="text-xs">
+                      {{ selectedProject.name }}
+                    </p>
+                    <p
+                      *ngIf="!selectedProject"
+                      class="text-tertiary-400 text-xs">
+                      Select Project
+                    </p>
+                  </div>
+                  <div
+                    class="flex items-center gap-2"
+                    *ngIf="
+                      saleInvoice.status === 0 &&
+                      (salePayments.length || 0) === 0
+                    ">
+                    <button
+                      *ngIf="selectedProject"
+                      type="button"
+                      class="btn-high cursor-pointer"
+                      (click)="removeProject()">
+                      <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn-high cursor-pointer"
+                      (click)="onSelectProject()">
+                      <fa-icon
+                        [icon]="faChevronDown"
+                        [fixedWidth]="true"></fa-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="flex flex-col justify-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3">
+                <div
+                  *ngIf="remainingAmount !== null"
+                  class="text-xs text-gray-600 md:space-y-4">
+                  <div>
+                    <span class="font-semibold text-gray-700"
+                      >Remaining Amount:</span
+                    >
+                    {{ remainingAmount | fcCurrency }}
+                  </div>
+
+                  <span
+                    *ngIf="
+                      saleInvoice.status === 0 &&
+                      (salePayments.length || 0) === 0
+                    "
+                    class="italic"
+                    >Please input subtotal ≤ remaining amount</span
+                  >
+                </div>
+
+                <div class="flex flex-col">
+                  <fc-input-number
+                    title="Subtotal"
+                    placeholder="Enter Subtotal"
+                    formControlName="subtotal"
+                    [currency]="true"
+                    [readonly]="
+                      saleInvoice.status !== 0 ||
+                      (saleInvoice.status === 0 &&
+                        (salePayments.length || 0) > 0)
+                    ">
+                  </fc-input-number>
+
+                  <div
+                    *ngIf="
+                      saleInvoiceForm.get('subtotal')?.hasError('maxRemaining')
+                    "
+                    class="mt-1 text-xs text-red-600">
+                    Subtotal cannot exceed Remaining Amount ({{
+                      remainingAmount | fcCurrency
+                    }})
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="flex flex-col justify-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3">
+                <fc-select-option
+                  [options]="discountTypes"
+                  [optionValue]="'id'"
+                  [optionLabel]="'name'"
+                  formControlName="discount_type"
+                  title="Discount Type"
+                  [desktopView]="'overlay'"
+                  [mobileView]="'dialog'"
+                  [placeholder]="'Select Discount Type'"
+                  class="flex-1"
+                  [readonly]="
+                    saleInvoice.status !== 0 ||
+                    (saleInvoice.status === 0 && (salePayments.length || 0) > 0)
+                  ">
+                </fc-select-option>
+
+                <div class="flex w-full items-center">
+                  <fc-input-number
+                    class="w-full justify-stretch"
+                    title="Discount Value"
+                    formControlName="discount_value"
+                    placeholder="Enter Discount Value"
+                    (onBlur)="calculateGrandDiscount()"
+                    mode="decimal"
+                    [min]="0"
+                    [max]="isPercent ? 100 : maxGrandDiscount"
+                    [readonly]="
+                      saleInvoice.status !== 0 ||
+                      (saleInvoice.status === 0 &&
+                        (salePayments.length || 0) > 0)
+                    ">
+                  </fc-input-number>
+                  <span
+                    *ngIf="isPercent"
+                    class="flex items-center rounded-r-lg border border-l-0 border-gray-300 bg-gray-700 px-3 text-sm text-gray-300 select-none">
+                    %
+                  </span>
+                </div>
+              </div>
+            </form>
+
+            <div class="mt-4 flex flex-col items-end text-sm">
+              <div
+                class="ring-tertiary-200 w-full max-w-sm rounded-md bg-white p-4 ring-1">
+                <div class="flex justify-between py-1">
+                  <span class="text-gray-600">Grand Total</span>
+                  <span class="font-medium text-black">
+                    {{ grandTotal | fcCurrency }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <ng-container
+              *ngIf="
+                saleInvoice.status === 0 && (salePayments.length || 0) === 0
+              ">
+              <div class="mt-4 flex justify-end gap-3">
+                <button
+                  class="flex cursor-pointer items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+                  (click)="submit()">
+                  Save
+                </button>
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #infoView>
+            <div
+              class="ring-tertiary-200 mb-4 rounded-md bg-white p-4 text-sm text-gray-700 shadow-sm ring-1">
+              <div
+                class="mb-4 flex flex-col border-b pb-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h1 class="text-2xl font-bold">INVOICE</h1>
+                  <p>{{ saleInvoice.invoice_no }}</p>
+                </div>
+                <div class="hidden text-right sm:block">
+                  Invoice Date<br />
+                  {{ saleInvoiceForm.get('date')?.value | date: 'd MMM y' }}
+                </div>
+                <div
+                  class="mt-2 grid grid-cols-[90px_16px_1fr] text-sm sm:hidden">
+                  <div class="text-gray-500">Invoice Date</div>
+                  <div>:</div>
+                  <div>
+                    {{ saleInvoiceForm.get('date')?.value | date: 'd MMM y' }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid gap-6 md:grid-cols-2">
+                <div class="space-y-3">
+                  <p class="text-lg font-bold">Billed To</p>
+                  <div
+                    *ngIf="saleInvoice?.customer as cust"
+                    class="space-y-2 text-sm">
+                    <div
+                      class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+                      <div class="text-gray-500">Customer</div>
+                      <div>:</div>
+                      <div class="break-words">{{ cust.name }}</div>
+                    </div>
+
+                    <div
+                      class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+                      <div class="text-gray-500">Address</div>
+                      <div>:</div>
+                      <div class="break-words">
+                        {{ cust.address }}
+                      </div>
+                    </div>
+
+                    <div
+                      class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+                      <div class="text-gray-500">Phone</div>
+                      <div>:</div>
+                      <div class="break-all">{{ cust.phone_no }}</div>
+                    </div>
+
+                    <div
+                      class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+                      <div class="text-gray-500">Email</div>
+                      <div>:</div>
+                      <div class="break-all">{{ cust.email }}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Summary Table -->
+                <div class="space-y-3">
+                  <p class="text-lg font-bold">Billing Details</p>
+                  <div class="w-full overflow-x-auto">
+                    <table class="w-full border border-gray-200 text-sm">
+                      <tbody>
+                        <tr>
+                          <td
+                            class="w-32 border px-3 py-2 text-gray-500 sm:w-40">
+                            Project
+                          </td>
+                          <td class="border px-3 py-2">
+                            {{ selectedProject?.name || '-' }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            class="w-32 border px-3 py-2 text-gray-500 sm:w-40">
+                            <div>Remaining Amount</div>
+                            <span class="block text-xs italic">
+                              (for project {{ selectedProject?.name }})
+                            </span>
+                          </td>
+                          <td class="border px-3 py-2">
+                            {{ remainingAmount | fcCurrency }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            class="w-32 border px-3 py-2 text-gray-500 sm:w-40">
+                            Subtotal
+                          </td>
+                          <td class="border px-3 py-2">
+                            {{
+                              saleInvoiceForm.get('subtotal')?.value
+                                | fcCurrency
+                            }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="mt-6 space-y-3">
+                      <div
+                        class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+                        <div class="text-gray-500">Discount</div>
+                        <div>:</div>
+                        <div>
+                          {{ saleInvoice.discount_amount | fcCurrency }}
+                        </div>
+                      </div>
+
+                      <div
+                        class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+                        <div class="text-gray-500">Grand Total</div>
+                        <div>:</div>
+                        <div class="font-bold">
+                          {{ grandTotal | fcCurrency }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+
+        <!-- Payment -->
+        <ng-container
+          *ngIf="saleInvoice.status === 0 || saleInvoice.status === 1">
+          <div
+            class="ring-tertiary-200 mb-4 space-y-4 rounded-md bg-white p-4 text-sm text-gray-700 shadow-sm ring-1">
+            <div class="">
+              <p class="text-sm font-bold text-black">Payment</p>
+              <span class="text-xs text-gray-500 italic"
+                >For payment, please select one of the available methods
+                below</span
+              >
+            </div>
+            <div class="flex space-x-4">
+              <div
+                *ngFor="
+                  let method of [
+                    { id: 'manual', label: 'Manual Transfer' },
+                    { id: 'midtrans', label: 'Virtual Account' },
+                  ]
+                "
+                class="flex cursor-pointer items-center rounded-lg border-2 px-4 py-2"
+                [ngClass]="
+                  paymentMethods === method.id
+                    ? 'border-sky-600'
+                    : 'border-gray-300 bg-gray-50'
+                "
+                (click)="onSelect(method.id)">
+                <input
+                  type="radio"
+                  name="payment_method"
+                  class="mr-2 cursor-pointer"
+                  [value]="method.id"
+                  [checked]="paymentMethods === method.id"
+                  (change)="onSelect(method.id)" />
+                <span class="text-xs font-medium lg:text-sm">{{
+                  method.label
+                }}</span>
+              </div>
+            </div>
+
+            <div *ngIf="paymentVisibility?.showImageUpload">
+              <div
+                class="flex items-center rounded-lg bg-sky-50 p-3 lg:col-span-3">
+                <fa-icon
+                  [icon]="faBank"
+                  [fixedWidth]="true"
+                  class="mr-2 text-sky-700"></fa-icon>
+                <p class="text-xs font-medium text-sky-700">
+                  Company Bank Account:
+                  <span class="font-semibold"> BNI 3312201043 (Folxcode)</span>
+                </p>
+              </div>
+              <div
+                class="mt-6 flex h-[200px] flex-col rounded-md border-2 border-dashed border-gray-300 p-4"
+                (click)="fileInput.click()"
+                (drop)="handleDrop($event)"
+                (dragover)="handleDragOver($event)">
+                <div
+                  class="mx-auto text-center text-gray-300"
+                  *ngIf="!pastedImages?.length">
+                  <fa-icon
+                    [icon]="faImage"
+                    [fixedWidth]="true"
+                    class="h-12 w-12 text-4xl"></fa-icon>
+                  <h3 class="text-center text-gray-700">
+                    Paste, Drag and Drop, or Select Images
+                  </h3>
+                </div>
+                <input
+                  #fileInput
+                  type="file"
+                  multiple
+                  (change)="onFileSelected($event); fileInput.value = ''"
+                  class="hidden" />
+                <div class="flex flex-1 gap-3 overflow-x-auto">
+                  <div
+                    class="relative aspect-square h-full"
+                    *ngFor="let image of pastedImages; let i = index">
+                    <img
+                      [src]="image.image_url"
+                      alt="Pasted Image"
+                      class="h-full w-full rounded-sm object-cover" />
+                    <fa-icon
+                      class="absolute top-2 right-2 cursor-pointer text-red-500"
+                      [icon]="faTrash"
+                      (click)="removeImage($event, i)"></fa-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <button
+                type="button"
+                [ngClass]="[
+                  getButtonColor(saleInvoice.status),
+                  isPayAllowed(paymentMethods === 'midtrans') && !loadingSubmit
+                    ? 'opacity-100'
+                    : 'opacity-25',
+                ]"
+                [disabled]="
+                  !isPayAllowed(paymentMethods === 'midtrans') || loadingSubmit
+                "
+                (click)="pay()"
+                class="w-full cursor-pointer rounded-lg py-2 text-sm font-medium text-white transition duration-150 ease-in-out">
+                <ng-container *ngIf="!loadingSubmit; else loadingTemplate">
+                  Pay Now
+                </ng-container>
+
+                <ng-template #loadingTemplate>
+                  <div class="flex items-center justify-center">
+                    <svg
+                      class="mr-2 h-4 w-4 animate-spin text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24">
+                      <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4"></circle>
+                      <path
+                        class="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    Loading...
+                  </div>
+                </ng-template>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Payment History">
+      <div class="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <app-payment-history-list
+          [salePayments]="saleInvoice.sale_payments || []"
+          (refreshParent)="refresh()"></app-payment-history-list>
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+</div>

@@ -1,0 +1,67 @@
+<div class="@container flex h-full flex-col gap-3 bg-white p-3">
+  <div
+    class="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+    <h1 class="text-sm font-bold text-black uppercase">Sale Invoice List</h1>
+
+    <div class="flex items-center gap-1">
+      <div
+        class="border-tertiary-400 btn-high flex flex-1 overflow-clip rounded-lg border">
+        <div class="flex h-8 w-8 items-center justify-center">
+          <fa-icon
+            class="text-tertiary-400 text-xs"
+            [icon]="faSearch"
+            [fixedWidth]="true">
+          </fa-icon>
+        </div>
+        <input
+          type="text"
+          name="search"
+          id="search"
+          [(ngModel)]="searchQuery"
+          fcDebounceKeyup
+          [debounceTime]="900"
+          (onEvent)="search()"
+          class="block w-full flex-1 px-2 text-xs text-black outline-none placeholder:text-gray-400 focus:ring-0"
+          placeholder="Search Sale Invoice" />
+      </div>
+      <ng-container *ngFor="let button of actionButtons">
+        <button
+          *ngIf="button.id !== 1 || authUser.role === 0"
+          type="button"
+          class="btn-high relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-gray-400 hover:bg-gray-100"
+          (click)="button.action()"
+          [pTooltip]="button.label"
+          tooltipPosition="left"
+          [routerLink]="button.route">
+          <fc-svg-loader
+            [path]="button.icon"
+            [className]="'[&>svg]:h-4 [&>svg]:w-4 text-gray-400'">
+          </fc-svg-loader>
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="flex min-h-0 flex-1 flex-col overflow-hidden">
+    <div class="flex-1 overflow-y-auto md:overflow-hidden">
+      <fc-table
+        [columns]="columns"
+        [data]="sale_invoices"
+        [loading]="loading"
+        [getPrimaryValue]="getSaleInvoicePrimary"
+        [getSecondaryValue]="getSaleInvoiceSecondary"
+        (rowClick)="navigateToDetail($event)">
+      </fc-table>
+    </div>
+  </div>
+
+  <div class="mt-auto w-full justify-end gap-3 py-3">
+    <fc-pagination
+      [rows]="rows"
+      [page]="page"
+      [totalPages]="totalPages"
+      [totalRecords]="totalRecords"
+      (onPageUpdate)="onPageUpdate($event)">
+    </fc-pagination>
+  </div>
+</div>

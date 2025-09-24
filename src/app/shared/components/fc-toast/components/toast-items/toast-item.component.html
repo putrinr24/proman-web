@@ -1,0 +1,54 @@
+<div
+  class="group w-full rounded-lg border border-[#e5e7eb] bg-white/80 px-4 py-2 text-left text-xs [backdrop-filter:blur(3px)] transition duration-500 ease-in-out"
+  [ngClass]="{
+    'translate-x-0 opacity-100': toast.showed,
+    'translate-x-full opacity-0': !toast.showed,
+  }">
+  <div class="toast">
+    <button
+      type="button"
+      class="absolute -top-2 -left-2 hidden cursor-pointer rounded-full bg-[#e5e7eb]/50 p-1 text-xs group-hover:block hover:bg-[#414246]/20"
+      (click)="close()">
+      <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+    </button>
+    <div class="flex items-center gap-2">
+      <div class="aspect-square h-[40px] rounded-lg" *ngIf="toast.lottieOption">
+        <ng-lottie
+          [options]="toast.lottieOption"
+          (animationCreated)="animationCreated($event)"></ng-lottie>
+      </div>
+      <div class="content">
+        <div class="header flex items-center text-xs">
+          <div class="title flex flex-1 items-center gap-1">
+            <p class="text-xs">{{ toast.header }}</p>
+          </div>
+        </div>
+        <div class="body">
+          <div class="subject">
+            <p class="text-2xs font-bold">{{ toast.subheader }}</p>
+          </div>
+          <div class="message">
+            <p class="text-2xs" [innerHTML]="toast.message"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div
+        class="action-buttons flex flex-wrap justify-end gap-2"
+        *ngIf="toast.actionButtons">
+        <button
+          type="button"
+          class="btn-high rounded-md px-3 py-1 text-xs"
+          (click)="actionButton.action(); close()"
+          *ngFor="let actionButton of toast.actionButtons">
+          <fa-icon
+            [icon]="actionButton.icon"
+            [fixedWidth]="true"
+            *ngIf="actionButton.icon"></fa-icon>
+          {{ actionButton.label }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

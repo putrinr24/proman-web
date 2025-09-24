@@ -1,0 +1,80 @@
+<div
+  #targetEl
+  (click)="disabled || readonly ? '' : fcDialog.toggle($event)"
+  [ngClass]="{
+    'border-tertiary-300': !isInvalid,
+    'border-red-400': isInvalid,
+  }"
+  class="wrapper form-input border-tertiary-300 flex cursor-pointer items-center gap-1 rounded-lg border bg-white p-2"
+  [ngClass]="{ 'cursor-pointer': !disabled, 'opacity-50': disabled }">
+  <div class="flex flex-1 flex-col">
+    <p
+      *ngIf="title"
+      class="text-2xs m-0 block p-0 leading-5 font-medium text-gray-700">
+      {{ title }}
+      <span *ngIf="required" class="text-red-500">*</span>
+    </p>
+    <p class="text-xs" *ngIf="value != null">
+      {{ valueLabel }}
+    </p>
+    <p class="text-tertiary-400 text-xs" *ngIf="value == null">
+      {{ placeholder }}
+    </p>
+  </div>
+  <div class="flex items-center gap-2" *ngIf="!disabled && !readonly">
+    <button
+      type="button"
+      class="cursor-pointer"
+      (click)="onRemoveValue(); $event.stopPropagation()"
+      *ngIf="value != null && !hideCloseButton">
+      <fa-icon [icon]="faTimes" [fixedWidth]="true" class="text-sm"></fa-icon>
+    </button>
+    <button type="button">
+      <fa-icon
+        class="chevron-icon text-sm"
+        [fixedWidth]="true"
+        [icon]="faChevronDown"></fa-icon>
+    </button>
+  </div>
+</div>
+
+<fc-dialog
+  #fcDialog
+  [title]="title"
+  [desktopView]="desktopView"
+  [mobileView]="mobileView">
+  <div class="bg-light-highest flex w-full flex-col gap-2 py-2 text-black">
+    <div
+      class="search border-tertiary-400 mx-2 flex overflow-clip rounded-lg border"
+      *ngIf="searchable">
+      <div class="flex items-center rounded-l-xl px-2 text-xs">
+        <fa-icon
+          class="text-tertiary-400"
+          [icon]="faSearch"
+          [fixedWidth]="true"></fa-icon>
+      </div>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        [placeholder]="'Search ' + optionLabel"
+        class="block h-8 w-full flex-1 py-2 text-xs text-black outline-none placeholder:text-gray-400 focus:ring-0" />
+    </div>
+    <div
+      class="list h-[200px] w-[250px] space-y-2 overflow-auto rounded p-2 hover:border-transparent hover:ring-transparent">
+      <ng-container *ngFor="let option of showableOptions">
+        <button
+          (click)="onValueChange(option); fcDialog.toggle($event, targetEl)"
+          class="border-tertiary-100 bg-tertiary-100 hover:border-tertiary-200 w-full cursor-pointer rounded-md border p-2 text-left text-xs">
+          {{ option[optionLabel] }}
+        </button>
+      </ng-container>
+    </div>
+    <div class="px-2" *ngIf="pagination">
+      <fc-pagination
+        [rows]="1"
+        [page]="1"
+        [totalPages]="2"
+        [totalRecords]="100"></fc-pagination>
+    </div>
+  </div>
+</fc-dialog>

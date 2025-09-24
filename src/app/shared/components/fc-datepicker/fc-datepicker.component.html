@@ -1,0 +1,101 @@
+<div
+  #dateInput
+  class="form-input flex items-center gap-1 border p-2"
+  [ngClass]="{
+    'rounded-lg border-gray-300': displayType != 'chip',
+    'rounded-full border-[#667085] bg-[#ffffff] px-2 py-1.5':
+      displayType == 'chip',
+    'border-[#FDB022] bg-[#FFFAEB]':
+      value?.start && value?.end && displayType == 'chip',
+  }">
+  <div
+    class="flex flex-1 cursor-pointer flex-col"
+    (click)="!disabled && !readonly ? op.toggle($event, dateInput) : ''">
+    <p
+      *ngIf="title"
+      class="text-2xs block p-0 leading-5 font-medium text-gray-700">
+      {{ title }}
+      <span *ngIf="required" class="text-error-500">*</span>
+    </p>
+    <ng-container *ngIf="type === 'range'">
+      <p
+        class="text-xs"
+        *ngIf="value && !displayPresetLabel"
+        [ngClass]="{
+          'text-[#F79009]':
+            value?.start && value?.end && displayType === 'chip',
+        }">
+        {{ value.start | date: (view == 'month' ? 'MMM-yyyy' : 'dd-MM-yyyy') }}
+        -
+        {{ value.end | date: (view == 'month' ? 'MMM-yyyy' : 'dd-MM-yyyy') }}
+      </p>
+      <p
+        class="text-xs"
+        *ngIf="value && displayPresetLabel"
+        [ngClass]="{
+          'text-[#F79009]':
+            value?.start && value?.end && displayType === 'chip',
+        }">
+        {{ displayPresetLabel }}
+      </p>
+    </ng-container>
+    <ng-container *ngIf="type == 'single'">
+      <p class="text-xs" *ngIf="value">
+        {{ value | date: (view == 'month' ? 'MMM-yyyy' : 'dd-MM-yyyy') }}
+      </p>
+    </ng-container>
+    <p
+      class="text-tertiary-400 text-xs"
+      [ngClass]="{
+        invisible: placeholder == '',
+      }"
+      *ngIf="type === 'single' ? value == null : value.start == null">
+      {{ placeholder || 'placeholder' }}
+    </p>
+  </div>
+  <div class="flex items-center gap-1">
+    <button
+      type="button"
+      (click)="removeValue()"
+      *ngIf="
+        (type == 'single' ? value != null : value.start != null) &&
+        !disabled &&
+        !readonly &&
+        !hideCloseButton
+      ">
+      <fa-icon
+        [icon]="faTimes"
+        [fixedWidth]="true"
+        [ngClass]="{
+          'text-[#F79009]': value?.start && value?.end && displayType == 'chip',
+        }"></fa-icon>
+    </button>
+    <button
+      *ngIf="!disabled && !readonly"
+      type="button"
+      (click)="op.toggle($event, dateInput)">
+      <fa-icon
+        [fixedWidth]="true"
+        [ngClass]="{
+          'text-[#F79009]': value?.start && value?.end && displayType == 'chip',
+        }"
+        [icon]="
+          displayType == 'chip' ? faChevronDown : faCalendarDay
+        "></fa-icon>
+    </button>
+  </div>
+</div>
+
+<p-overlayPanel #op styleClass=""
+  ><p-datePicker
+    [inputId]="uniqueId"
+    [ngModel]="type === 'range' ? selectionDates : value"
+    [selectionMode]="type"
+    [readonlyInput]="true"
+    [showIcon]="false"
+    [showButtonBar]="true"
+    [inline]="true"
+    [view]="view"
+    [numberOfMonths]="type === 'range' ? 2 : 1"
+    (ngModelChange)="onDatePickerChange($event); op.hide()"></p-datePicker>
+</p-overlayPanel>

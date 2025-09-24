@@ -1,0 +1,12 @@
+# Ignore artifacts:
+build
+coverage
+.angular
+.vscode
+dist
+node_modules
+.gitignore
+.editorconfig
+.browserslistrc
+# Ignore all HTML files:
+

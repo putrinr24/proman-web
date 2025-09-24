@@ -1,0 +1,63 @@
+<button
+  #targetEl
+  type="button"
+  (click)="calculator.toggle($event, target ? target : targetEl)">
+  <fa-icon [fixedWidth]="true" [icon]="fcCalculator"></fa-icon>
+</button>
+
+<fc-dialog
+  #calculator
+  [title]="title"
+  [desktopView]="'overlay'"
+  [mobileView]="'dialog'">
+  <div class="bg-light-low text-dark-lowest flex w-full flex-col gap-1 py-1">
+    <div class="input mx-1 rounded-md p-1">
+      <p
+        class="history text-2xs text-dark-high/60 text-left"
+        [ngClass]="{ visible: calculateString, invisible: !calculateString }">
+        <ng-container *ngIf="!calculateString">null</ng-container>
+        <ng-container *ngIf="calculateString">
+          <ng-container>{{ calculateString }}</ng-container>
+        </ng-container>
+      </p>
+      <p class="history text-right text-sm" [ngClass]="{ visible: true }">
+        {{ value | number }}
+      </p>
+    </div>
+    <div class="number-input grid grid-cols-5 gap-1 p-1 md:w-[255px]">
+      <button
+        *ngFor="let calculatorButton of calculatorButtons"
+        [title]="calculatorButton.label"
+        (click)="addValue(calculatorButton)"
+        type="button"
+        class="bg-light-lowest text-dark-lowest flex aspect-square w-full items-center justify-center rounded-lg text-xs">
+        <span>
+          <ng-container *ngIf="!calculatorButton.icon">{{
+            calculatorButton.value
+          }}</ng-container>
+          <ng-container *ngIf="calculatorButton.icon">
+            <fa-icon
+              [fixedWidth]="true"
+              [icon]="calculatorButton.icon"></fa-icon>
+            <p class="text-2xs" *ngIf="calculatorButton.value != 'del'">
+              {{ calculatorButton.label }}
+            </p>
+          </ng-container>
+        </span>
+      </button>
+      <button
+        type="button"
+        title="'equal'"
+        (click)="
+          addValue({
+            label: 'equal',
+            value: '=',
+            isEqual: true,
+          })
+        "
+        class="bg-primary-light col-span-2 flex h-full w-full items-center justify-center rounded-lg text-xs">
+        <span>=</span>
+      </button>
+    </div>
+  </div>
+</fc-dialog>

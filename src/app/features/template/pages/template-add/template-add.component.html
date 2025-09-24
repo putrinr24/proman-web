@@ -1,0 +1,151 @@
+<div class="@container p-3">
+  <div class="mb-8 flex flex-col gap-4">
+    <div class="flex flex-col justify-between sm:flex-row sm:items-center">
+      <div class="text-sm font-bold text-black uppercase">
+        Create New Template
+      </div>
+    </div>
+
+    <form [formGroup]="templateForm" class="grid w-full gap-3 md:grid-cols-2">
+      <fc-input-text
+        title="Name"
+        formControlName="name"
+        placeholder="Enter Template Name" />
+      <fc-textarea
+        placeholder="Enter Description/Requirements"
+        formControlName="description"
+        title="Description/Requirements"></fc-textarea>
+    </form>
+
+    <div class="mt-4 flex flex-col">
+      <p class="text-sm font-bold text-black">Feature Information</p>
+      <span class="text-xs text-gray-500 italic"
+        >Specify the feature request below</span
+      >
+      <button
+        class="bg-primary hover:bg-primary-600 focus:ring-primary-300 text-2xs mt-3 w-fit cursor-pointer rounded-lg px-3 py-1 text-white focus:ring-2 focus:ring-offset-2 focus:outline-none"
+        type="button"
+        (click)="addFeature()">
+        <fa-icon [icon]="faPlus" [fixedWidth]="true"></fa-icon> Add Feature
+      </button>
+
+      <!-- Table -->
+      <div class="py-4">
+        <div
+          class="border-tertiary-200 overflow-x-auto border"
+          *ngIf="features.value.length">
+          <div class="min-w-[50rem] divide-y divide-gray-200">
+            <div
+              class="bg-tertiary-100 grid grid-cols-5 px-4 py-2 text-sm font-semibold text-gray-700">
+              <div>Feature Name</div>
+              <div>PIC</div>
+              <div>Price</div>
+              <div>Status</div>
+              <div>Action</div>
+            </div>
+            <div
+              *ngFor="let feature of features.value; let i = index"
+              (click)="toggleRow(i)"
+              class="cursor-pointer">
+              <div
+                class="hover:bg-tertiary-50 grid grid-cols-5 items-center bg-white px-4 py-2 text-sm text-gray-700">
+                <div>{{ feature.name }}</div>
+                <div>
+                  <ng-container
+                    *ngIf="feature.assigned_to?.name; else notAssigned">
+                    {{ feature.assigned_to.name }}
+                  </ng-container>
+                  <ng-template #notAssigned>
+                    <span class="text-gray-400 italic">Not assigned yet</span>
+                  </ng-template>
+                </div>
+                <div>{{ feature.price | fcCurrency }}</div>
+                <div>
+                  <span
+                    [ngClass]="{
+                      'font-medium text-yellow-500': feature.status === 0,
+                      'font-medium text-blue-500': feature.status === 1,
+                      'font-medium text-green-500': feature.status === 2,
+                      'font-medium text-red-500': feature.status === 3,
+                    }">
+                    {{ feature.status_name }}
+                  </span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button
+                    (click)="editFeature(i); $event.stopPropagation()"
+                    type="button"
+                    class="cursor-pointer rounded-lg bg-yellow-400 p-2 hover:bg-yellow-500">
+                    <fc-svg-loader
+                      [path]="'images/icons/pencil.svg'"
+                      [className]="
+                        '[&>svg]:size-4 [&>svg]:text-white fill-current'
+                      ">
+                    </fc-svg-loader>
+                  </button>
+                  <button
+                    (click)="deleteFeature(i); $event.stopPropagation()"
+                    type="button"
+                    class="cursor-pointer rounded-lg bg-red-500 p-2 hover:bg-red-600">
+                    <fc-svg-loader
+                      [path]="'images/icons/trash.svg'"
+                      [className]="
+                        '[&>svg]:size-4 [&>svg]:text-white fill-current'
+                      ">
+                    </fc-svg-loader>
+                  </button>
+                </div>
+              </div>
+
+              <div
+                *ngIf="expandedRowIndex === i"
+                class="col-span-5 border-t border-gray-200 bg-gray-50 px-4 py-2 text-gray-700">
+                <div class="flex items-start gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="mt-0.5 h-4 w-4 shrink-0 text-gray-500"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="m15 10 5 5-5 5" />
+                    <path d="M4 4v7a4 4 0 0 0 4 4h12" />
+                  </svg>
+                  <div class="text-xs leading-relaxed">
+                    <span class="font-semibold">Note:</span>
+                    <span class="ml-1">
+                      {{ feature.note || 'No note available.' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        *ngIf="features.value.length"
+        class="mt-4 flex flex-col items-end text-sm">
+        <div
+          class="ring-tertiary-200 w-full max-w-sm rounded-md bg-white p-4 ring-1">
+          <div class="flex justify-between py-1">
+            <span class="text-gray-600">Price Total</span>
+            <span class="font-medium text-black">
+              {{ totalFeaturePrice | fcCurrency }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 flex justify-end gap-3">
+      <button
+        class="flex cursor-pointer items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+        (click)="submit()">
+        Submit
+      </button>
+    </div>
+  </div>
+</div>

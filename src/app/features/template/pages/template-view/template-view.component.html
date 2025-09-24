@@ -1,0 +1,175 @@
+<div class="@container p-3">
+  <div class="flex flex-col gap-4">
+    <div class="flex items-center justify-between">
+      <h1 class="text-sm font-bold text-black uppercase">Template Detail</h1>
+      <div class="flex items-center gap-2">
+        <button
+          *ngIf="authUser.role === 0"
+          type="button"
+          class="h-8 cursor-pointer rounded-md bg-sky-600 px-3 text-sm font-medium text-white transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+          (click)="createProjectFromTemplate()">
+          Use Template
+        </button>
+        <ng-container *ngFor="let button of actionButtons">
+          <button
+            type="button"
+            class="btn-high flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-gray-400 p-1 hover:bg-gray-100"
+            [pTooltip]="button.label"
+            (click)="button.action()">
+            <fc-svg-loader
+              [path]="button.icon"
+              [className]="'[&>svg]:size-4 text-gray-400'">
+            </fc-svg-loader>
+          </button>
+        </ng-container>
+      </div>
+    </div>
+
+    <form [formGroup]="templateForm" class="grid w-full gap-3 md:grid-cols-2">
+      <fc-input-text
+        title="Name"
+        formControlName="name"
+        placeholder="Enter Template Name"
+        [readonly]="authUser?.role === 1" />
+      <fc-textarea
+        placeholder="Enter Description/Requirements"
+        formControlName="description"
+        title="Description/Requirements"
+        [readonly]="authUser?.role === 1"></fc-textarea>
+    </form>
+
+    <div *ngIf="authUser.role === 0" class="mt-4 flex justify-end gap-3">
+      <button
+        class="flex cursor-pointer items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+        (click)="submit()">
+        Save
+      </button>
+    </div>
+
+    <div class="mt-4 flex flex-col">
+      <p class="text-sm font-bold text-black">Feature Information</p>
+      <span *ngIf="authUser.role === 0" class="text-xs text-gray-500 italic"
+        >Specify the feature request below</span
+      >
+      <button
+        *ngIf="authUser.role === 0"
+        (click)="addFeature()"
+        class="mt-3 flex w-fit cursor-pointer items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs text-gray-600 hover:bg-gray-100">
+        <fa-icon [icon]="faPlus"></fa-icon>
+        Add Feature
+      </button>
+
+      <div class="py-4">
+        <div
+          class="border-tertiary-200 overflow-x-auto rounded border"
+          *ngIf="features.value.length">
+          <div class="min-w-[50rem] divide-y divide-gray-200">
+            <div
+              class="bg-tertiary-100 grid grid-cols-5 px-4 py-2 text-sm font-semibold text-gray-700"
+              [ngClass]="{
+                'grid-cols-5': authUser.role === 0,
+                'grid-cols-3': authUser.role === 1,
+              }">
+              <div>Feature Name</div>
+              <div>PIC</div>
+              <div *ngIf="authUser.role === 0">Price</div>
+              <div>Status</div>
+              <div *ngIf="authUser.role === 0">Action</div>
+            </div>
+            <div
+              *ngFor="let feature of features.value; let i = index"
+              (click)="toggleRow(i)"
+              class="cursor-pointer">
+              <div
+                class="hover:bg-tertiary-50 grid items-center bg-white px-4 py-2 text-sm text-gray-700"
+                [ngClass]="{
+                  'grid-cols-5': authUser.role === 0,
+                  'grid-cols-3': authUser.role === 1,
+                }">
+                <div>{{ feature.name }}</div>
+
+                <div>
+                  <ng-container
+                    *ngIf="feature.assigned_to_user?.name; else notAssigned">
+                    {{ feature.assigned_to_user.name }}
+                  </ng-container>
+                  <ng-template #notAssigned>
+                    <span class="text-gray-400 italic">Not assigned yet</span>
+                  </ng-template>
+                </div>
+
+                <div *ngIf="authUser.role === 0">
+                  {{ feature.price | fcCurrency }}
+                </div>
+
+                <div>
+                  <span
+                    [ngClass]="{
+                      'font-medium text-yellow-500': feature.status === 0,
+                      'font-medium text-blue-500': feature.status === 1,
+                      'font-medium text-green-500': feature.status === 2,
+                      'font-medium text-red-500': feature.status === 3,
+                    }">
+                    {{ feature.status_name }}
+                  </span>
+                </div>
+
+                <div
+                  *ngIf="authUser.role === 0"
+                  class="flex items-center gap-2">
+                  <button
+                    (click)="editFeature(i); $event.stopPropagation()"
+                    type="button"
+                    class="cursor-pointer rounded-lg bg-yellow-400 p-2 hover:bg-yellow-500">
+                    <fc-svg-loader
+                      [path]="'images/icons/pencil.svg'"
+                      [className]="
+                        '[&>svg]:size-4 [&>svg]:text-white fill-current'
+                      ">
+                    </fc-svg-loader>
+                  </button>
+                  <button
+                    (click)="deleteFeature(i); $event.stopPropagation()"
+                    type="button"
+                    class="cursor-pointer rounded-lg bg-red-500 p-2 hover:bg-red-600">
+                    <fc-svg-loader
+                      [path]="'images/icons/trash.svg'"
+                      [className]="
+                        '[&>svg]:size-4 [&>svg]:text-white fill-current'
+                      ">
+                    </fc-svg-loader>
+                  </button>
+                </div>
+              </div>
+
+              <div
+                *ngIf="expandedRowIndex === i"
+                class="col-span-5 border-t border-gray-200 bg-gray-50 px-4 py-2 text-gray-700">
+                <div class="flex items-start gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="mt-0.5 h-4 w-4 shrink-0 text-gray-500"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="m15 10 5 5-5 5" />
+                    <path d="M4 4v7a4 4 0 0 0 4 4h12" />
+                  </svg>
+                  <div class="text-xs leading-relaxed">
+                    <span class="font-semibold">Note:</span>
+                    <span class="ml-1">
+                      {{ feature.note || 'No note available.' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,126 @@
+<div class="bg-light-highest space-y-3 rounded-lg p-5 backdrop-blur-sm">
+  <div class="flex items-center">
+    <h2 class="flex-1 text-sm font-medium">{{ title }}</h2>
+    <button
+      class="hover:bg-tertiary-100 cursor-pointer rounded-md p-2"
+      (click)="onClose()">
+      <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="attachmentForm" class="grid w-full grid-cols-1 gap-3">
+    <div
+      class="form-input border-tertiary-300 hover:bg-tertiary-100 flex cursor-pointer items-center rounded-lg border p-1">
+      <div class="flex flex-1 flex-col p-1" (click)="onSelectFeature()">
+        <p class="text-2xs font-medium text-gray-700">
+          Feature
+          <span *ngIf="isRequired('feature_id')" class="text-error-500">*</span>
+        </p>
+        <p *ngIf="selectedFeature" class="text-xs">
+          {{ selectedFeature.name }}
+        </p>
+        <p *ngIf="!selectedFeature" class="text-tertiary-400 text-xs">
+          Select Feature
+        </p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button
+          *ngIf="selectedFeature"
+          type="button"
+          class="btn-high"
+          (click)="removeFeature()">
+          <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+        </button>
+        <button type="button" (click)="onSelectFeature()">
+          <fa-icon [icon]="faChevronDown" [fixedWidth]="true"></fa-icon>
+        </button>
+      </div>
+    </div>
+    <fc-textarea
+      placeholder="Enter Note"
+      formControlName="note"
+      title="Note"
+      [rows]="3">
+    </fc-textarea>
+
+    <div class="mt-2 flex flex-col gap-1">
+      <p class="text-xs text-gray-500 italic">
+        Allowed file types: <span class="font-medium">JPG, JPEG, PNG, PDF</span>
+      </p>
+      <div
+        class="flex h-[200px] flex-col rounded-md border-2 border-dashed border-gray-300 p-4"
+        (click)="fileInput.click()"
+        (drop)="handleDrop($event)"
+        (dragover)="handleDragOver($event)">
+        <div
+          class="mx-auto items-center text-center text-gray-300"
+          *ngIf="!pastedImages.length">
+          <fa-icon
+            [icon]="faImage"
+            [fixedWidth]="true"
+            class="h-12 w-12 text-4xl"></fa-icon>
+          <h3 class="text-center text-sm font-medium text-gray-700">
+            Paste, Drag and Drop, or Select Images <br />
+          </h3>
+        </div>
+        <input
+          #fileInput
+          type="file"
+          multiple
+          (change)="onFileSelected($event)"
+          class="mb-4 hidden" />
+        <div class="flex flex-1 gap-3 overflow-x-auto">
+          <div
+            class="relative aspect-square h-full"
+            *ngFor="let image of pastedImages; let i = index">
+            <ng-container
+              *ngIf="
+                image.file.type.startsWith('image/');
+                else nonImagePreview
+              ">
+              <img
+                [src]="image.image_url"
+                alt="Preview"
+                class="h-full w-full rounded-sm object-cover" />
+            </ng-container>
+
+            <ng-template #nonImagePreview>
+              <div
+                class="flex h-full w-full flex-col items-center justify-center rounded-sm border border-gray-300 bg-gray-100 text-gray-600">
+                <fa-icon
+                  *ngIf="
+                    image.file.type === 'application/pdf';
+                    else otherFileIcon
+                  "
+                  [icon]="faFilePdf"
+                  class="mb-2 text-4xl text-red-500">
+                </fa-icon>
+                <ng-template #otherFileIcon>
+                  <fa-icon
+                    [icon]="faFileAlt"
+                    class="mb-2 text-4xl text-blue-500"></fa-icon>
+                </ng-template>
+                <span class="px-1 text-center text-xs break-all">
+                  {{ image.file.name }}
+                </span>
+              </div>
+            </ng-template>
+
+            <fa-icon
+              class="absolute top-2 right-2 cursor-pointer text-red-500"
+              [icon]="faTrash"
+              (click)="removeImage($event, i)"></fa-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="mt-4 flex justify-end gap-3">
+    <button
+      class="flex cursor-pointer items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+      (click)="submit()">
+      Submit
+    </button>
+  </div>
+</div>

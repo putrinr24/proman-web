@@ -1,0 +1,91 @@
+<div class="space-y-4">
+  <!-- <div class="flex flex-col">
+    <div class="flex w-full flex-row items-center justify-between gap-2">
+      <h1 class="text-sm font-bold text-black uppercase">
+        Payment History List
+      </h1>
+
+      <div class="flex gap-1">
+        <ng-container *ngFor="let button of actionButtons">
+          <button
+            type="button"
+            class="btn-high flex cursor-pointer rounded-md border border-gray-400 p-1 hover:bg-gray-100"
+            [pTooltip]="button.label"
+            (click)="button.action()">
+            <fc-svg-loader
+              [path]="button.icon"
+              [className]="'[&>svg]:size-4 text-gray-400'"></fc-svg-loader>
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="m-1" *ngIf="!loading && salePayments.length > 0; else noPayment">
+    <div
+      *ngFor="let salePayment of salePayments"
+      class="ring-tertiary-200 mb-4 space-y-4 rounded-md bg-white p-4 text-sm text-gray-700 shadow-sm ring-1 transition-colors duration-200"
+      [ngClass]="{
+        'hover:bg-tertiary-50 cursor-pointer': authUser.role === 0,
+      }"
+      (click)="authUser.role === 0 ? navigateToDetail(salePayment) : null">
+      <div class="grid grid-cols-1 gap-6">
+        <div class="space-y-2">
+          <div
+            class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+            <div class="text-gray-500">Status</div>
+            <div>:</div>
+            <div
+              class="w-fit rounded-full px-3 py-1 text-xs font-medium"
+              [ngClass]="{
+                'bg-yellow-100 text-yellow-600': salePayment.status === 0,
+                'bg-green-100 text-green-600': salePayment.status === 1,
+                'bg-red-100 text-red-600': salePayment.status === 2,
+              }">
+              {{ salePayment.status_label }}
+            </div>
+          </div>
+          <div
+            class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+            <div class="text-gray-500">Payment Date</div>
+            <div>:</div>
+            <div>
+              {{ salePayment.date | date: 'd MMM y' }}
+              {{ salePayment.date | date: 'hh:mm a' }}
+            </div>
+          </div>
+          <div
+            class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+            <div class="text-gray-500">Payment Method</div>
+            <div>:</div>
+            <div>{{ salePayment.payment_method_label }}</div>
+          </div>
+          <ng-container *ngIf="salePayment.payment_method_label === 'Manual'">
+            <div
+              class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+              <div class="text-gray-500">Payment Proof</div>
+              <div>:</div>
+              <div
+                class="h-12 w-12 rounded-md border border-gray-300 bg-white p-1">
+                <fc-image-preview
+                  [preview]="true"
+                  [src]="salePayment.url"
+                  alt="Payment Proof"></fc-image-preview>
+              </div>
+            </div>
+          </ng-container>
+          <div
+            class="grid grid-cols-[90px_16px_1fr] sm:grid-cols-[120px_16px_1fr]">
+            <div class="text-gray-500">Amount Paid</div>
+            <div>:</div>
+            <div>{{ salePayment.total | fcCurrency }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noPayment>
+    <fc-not-found text="No payment history found"></fc-not-found>
+  </ng-template>
+</div>

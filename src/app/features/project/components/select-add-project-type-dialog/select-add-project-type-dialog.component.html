@@ -1,0 +1,32 @@
+<div class="bg-light-highest space-y-3 rounded-lg p-5 backdrop-blur-sm">
+  <div class="flex items-center">
+    <h3 class="flex-1 text-sm font-medium">{{ title }}</h3>
+    <button
+      class="hover:bg-tertiary-100 cursor-pointer rounded-md p-2"
+      (click)="onClose()">
+      <fa-icon [fixedWidth]="true" [icon]="faTimes"></fa-icon>
+    </button>
+  </div>
+
+  <div class="mb-4">
+    <p class="mb-2 text-sm text-gray-600">Create a new project from scratch.</p>
+    <button
+      class="w-full cursor-pointer rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+      (click)="chooseNew()">
+      Create Project
+    </button>
+  </div>
+
+  <hr class="my-4 border-gray-300" />
+
+  <div>
+    <p class="mb-2 text-sm text-gray-600">
+      Create a project based on an existing template.
+    </p>
+    <button
+      class="hover:bg-tertiary-50 w-full cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700"
+      (click)="goToTemplateList()">
+      📑 Browse Templates
+    </button>
+  </div>
+</div>

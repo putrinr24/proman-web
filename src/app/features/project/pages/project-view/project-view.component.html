@@ -1,0 +1,340 @@
+<div class="@container p-3">
+  <p-tabs value="0" scrollable>
+    <p-tablist>
+      <p-tab value="0">Overview</p-tab>
+      <p-tab value="1">Attachment</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        <div class="mb-8 flex flex-col gap-4">
+          <div class="flex flex-col">
+            <div
+              class="flex w-full flex-col justify-between gap-2 sm:flex-row sm:items-center">
+              <p class="text-sm font-bold text-black uppercase">
+                Project Detail
+              </p>
+              <div class="flex items-center gap-2 self-end sm:self-auto">
+                <ng-container *ngIf="authUser.role === 0">
+                  <button
+                    type="button"
+                    class="h-8 cursor-pointer rounded-md bg-sky-600 px-3 text-sm font-medium text-white transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+                    (click)="setAsTemplate()">
+                    Set as Template
+                  </button>
+                </ng-container>
+                <ng-container *ngFor="let button of actionButtons">
+                  <button
+                    type="button"
+                    class="btn-high flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-gray-400 p-1 hover:bg-gray-100"
+                    [pTooltip]="button.label"
+                    (click)="button.action()">
+                    <fc-svg-loader
+                      [path]="button.icon"
+                      [className]="'[&>svg]:size-4 text-gray-400'">
+                    </fc-svg-loader>
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+          <ng-container *ngIf="authUser.role === 0; else infoView">
+            <form
+              [formGroup]="projectForm"
+              class="grid w-full gap-3 md:grid-cols-2 lg:grid-cols-3">
+              <div class="col-span-1 md:col-span-2 lg:col-span-1">
+                <fc-input-text
+                  title="Name"
+                  formControlName="name"
+                  placeholder="Enter Project Name" />
+              </div>
+              <div
+                class="form-input border-tertiary-300 hover:bg-tertiary-100 flex cursor-pointer items-center rounded-lg border p-1">
+                <div
+                  class="flex flex-1 flex-col p-1"
+                  (click)="onSelectCustomer()">
+                  <p class="text-2xs font-medium text-gray-700">
+                    Customer
+                    <span
+                      *ngIf="isRequired('customer_id')"
+                      class="text-error-500"
+                      >*</span
+                    >
+                  </p>
+                  <p *ngIf="selectedCustomer" class="text-xs">
+                    {{ selectedCustomer.name }}
+                  </p>
+                  <p
+                    *ngIf="!selectedCustomer"
+                    class="text-tertiary-400 text-xs">
+                    Select Customer
+                  </p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button
+                    *ngIf="selectedCustomer"
+                    type="button"
+                    class="btn-high"
+                    (click)="removeCustomer()">
+                    <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+                  </button>
+                  <button type="button" (click)="onSelectCustomer()">
+                    <fa-icon
+                      [icon]="faChevronDown"
+                      [fixedWidth]="true"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div
+                class="form-input border-tertiary-300 hover:bg-tertiary-100 flex cursor-pointer items-center rounded-lg border p-1">
+                <div
+                  class="flex flex-1 flex-col p-1"
+                  (click)="onAssignedToProjectManager()">
+                  <p class="text-2xs font-medium text-gray-700">
+                    Project Manager
+                    <span
+                      *ngIf="isRequired('assigned_to')"
+                      class="text-error-500"
+                      >*</span
+                    >
+                  </p>
+                  <p *ngIf="selectedProjectManager" class="text-xs">
+                    {{ selectedProjectManager.name }}
+                  </p>
+                  <p
+                    *ngIf="!selectedProjectManager"
+                    class="text-tertiary-400 text-xs">
+                    Select Project Manager
+                  </p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button
+                    *ngIf="selectedProjectManager"
+                    type="button"
+                    class="btn-high"
+                    (click)="removeProjectManager()">
+                    <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+                  </button>
+                  <button type="button" (click)="onAssignedToProjectManager()">
+                    <fa-icon
+                      [icon]="faChevronDown"
+                      [fixedWidth]="true"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="col-span-1 md:col-span-2 lg:col-span-3">
+                <fc-textarea
+                  placeholder="Enter Description"
+                  formControlName="description"
+                  title="Description/Requirements"
+                  [rows]="5"></fc-textarea>
+              </div>
+            </form>
+          </ng-container>
+
+          <ng-template #infoView>
+            <div
+              class="ring-tertiary-200 mb-4 space-y-2 rounded-md bg-white p-4 text-sm text-gray-700 shadow-sm ring-1">
+              <p><strong>Name:</strong> {{ projectForm.get('name')?.value }}</p>
+              <p>
+                <strong>Customer:</strong> {{ selectedCustomer?.name || '-' }}
+              </p>
+              <p>
+                <strong>Project Manager:</strong>
+                {{ selectedProjectManager?.name || '-' }}
+              </p>
+              <p class="whitespace-pre-line">
+                <strong>Description:</strong>
+                {{ projectForm.get('description')?.value || '-' }}
+              </p>
+            </div>
+          </ng-template>
+
+          <div *ngIf="authUser.role === 0" class="mt-4 flex justify-end gap-3">
+            <button
+              class="flex cursor-pointer items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+              (click)="submit()">
+              Save
+            </button>
+          </div>
+
+          <div class="mt-4 flex flex-col">
+            <p class="text-sm font-bold text-black">Feature Information</p>
+            <ng-container *ngIf="authUser.role === 0">
+              <span class="text-xs text-gray-500 italic"
+                >Specify the feature request below</span
+              >
+              <button
+                (click)="addFeature()"
+                class="mt-3 flex w-fit cursor-pointer items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs text-gray-600 hover:bg-gray-100">
+                <fa-icon [icon]="faPlus"></fa-icon>
+                Add Feature
+              </button>
+            </ng-container>
+
+            <div class="py-4">
+              <div
+                class="border-tertiary-200 overflow-x-auto rounded border"
+                *ngIf="features.value.length">
+                <div class="min-w-[50rem] divide-y divide-gray-200">
+                  <div
+                    class="bg-tertiary-100 grid px-4 py-2 text-sm font-semibold text-gray-700"
+                    [ngClass]="{
+                      'grid-cols-5': authUser.role === 0,
+                      'grid-cols-4':
+                        authUser.role === 1 ||
+                        authUser.role === 2 ||
+                        authUser.role === 3,
+                    }">
+                    <div>Feature Name</div>
+                    <div>PIC</div>
+                    <div *ngIf="authUser.role === 0 || authUser.role === 3">
+                      Price
+                    </div>
+                    <div>Status</div>
+                    <div *ngIf="authUser.role !== 3">Action</div>
+                  </div>
+                  <div
+                    *ngFor="let feature of features.value; let i = index"
+                    (click)="toggleRow(i)"
+                    class="cursor-pointer">
+                    <div
+                      class="hover:bg-tertiary-50 grid items-center bg-white px-4 py-2 text-sm text-gray-700"
+                      [ngClass]="{
+                        'grid-cols-5': authUser.role === 0,
+                        'grid-cols-4':
+                          authUser.role === 1 ||
+                          authUser.role === 2 ||
+                          authUser.role === 3,
+                      }">
+                      <div>{{ feature.name }}</div>
+
+                      <div>
+                        <ng-container
+                          *ngIf="
+                            feature.assigned_to_user?.name;
+                            else notAssigned
+                          ">
+                          {{ feature.assigned_to_user.name }}
+                        </ng-container>
+                        <ng-template #notAssigned>
+                          <span class="text-gray-400 italic"
+                            >Not assigned yet</span
+                          >
+                        </ng-template>
+                      </div>
+
+                      <div *ngIf="authUser.role === 0 || authUser.role === 3">
+                        {{ feature.price | fcCurrency }}
+                      </div>
+
+                      <div>
+                        <span
+                          [ngClass]="{
+                            'font-medium text-yellow-500': feature.status === 0,
+                            'font-medium text-blue-500': feature.status === 1,
+                            'font-medium text-green-500': feature.status === 2,
+                            'font-medium text-red-500': feature.status === 3,
+                          }">
+                          {{ feature.status_name }}
+                        </span>
+                      </div>
+
+                      <div
+                        *ngIf="authUser.role !== 3"
+                        class="flex items-center gap-2">
+                        <button
+                          (click)="editFeature(i); $event.stopPropagation()"
+                          type="button"
+                          class="cursor-pointer rounded-lg bg-yellow-400 p-2 hover:bg-yellow-500">
+                          <fc-svg-loader
+                            [path]="'images/icons/pencil.svg'"
+                            [className]="
+                              '[&>svg]:size-4 [&>svg]:text-white fill-current'
+                            ">
+                          </fc-svg-loader>
+                        </button>
+                        <button
+                          *ngIf="authUser.role === 0"
+                          (click)="deleteFeature(i); $event.stopPropagation()"
+                          type="button"
+                          class="cursor-pointer rounded-lg bg-red-500 p-2 hover:bg-red-600">
+                          <fc-svg-loader
+                            [path]="'images/icons/trash.svg'"
+                            [className]="
+                              '[&>svg]:size-4 [&>svg]:text-white fill-current'
+                            ">
+                          </fc-svg-loader>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div
+                      *ngIf="expandedRowIndex === i"
+                      class="col-span-5 border-t border-gray-200 bg-gray-50 px-4 py-2 text-gray-700">
+                      <div class="flex items-start gap-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="mt-0.5 h-4 w-4 shrink-0 text-gray-500"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round">
+                          <path d="m15 10 5 5-5 5" />
+                          <path d="M4 4v7a4 4 0 0 0 4 4h12" />
+                        </svg>
+                        <div class="text-xs leading-relaxed">
+                          <span class="font-semibold">Note:</span>
+                          <span class="ml-1">
+                            {{ feature.note || 'No note available.' }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <ng-container *ngIf="authUser.role === 0 || authUser.role === 3">
+              <div
+                *ngIf="features.value.length"
+                class="mt-4 flex flex-col items-end text-sm">
+                <div
+                  class="ring-tertiary-200 w-full max-w-sm rounded-md bg-white p-4 ring-1">
+                  <div class="flex justify-between py-1">
+                    <span class="text-gray-600">Price Total</span>
+                    <span class="font-medium text-black">
+                      {{ priceTotal | fcCurrency }}
+                    </span>
+                  </div>
+
+                  <div class="flex justify-between py-1">
+                    <span class="text-gray-600">Paid Amount</span>
+                    <span class="font-medium text-black">
+                      {{ project.paid_amount | fcCurrency }}
+                    </span>
+                  </div>
+
+                  <div class="flex justify-between py-1">
+                    <span class="text-gray-600">Remaining Amount</span>
+                    <span class="font-medium text-black">
+                      {{ remainingAmount | fcCurrency }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </p-tabpanel>
+      <p-tabpanel
+        value="1"
+        class="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <app-attachment-list [projectId]="project.id"></app-attachment-list>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</div>

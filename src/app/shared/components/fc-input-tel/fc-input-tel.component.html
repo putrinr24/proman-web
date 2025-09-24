@@ -1,0 +1,82 @@
+<label
+  #targetEl
+  class="form-input bg-light-highest flex items-center gap-2 rounded-lg border p-2 focus-within:!border focus-within:!border-[#64b6df]"
+  [for]="uniqueId"
+  [ngClass]="{
+    'border-tertiary-300': !isInvalid,
+    'border-error-500': isInvalid,
+  }">
+  <div class="flex flex-1 flex-col">
+    <p class="text-2xs m-0 block p-0 leading-5 font-medium text-gray-700">
+      {{ title }}
+      <span *ngIf="required" class="text-error-500">*</span>
+    </p>
+    <div class="flex gap-1">
+      <div
+        *ngIf="countryCode"
+        (click)="fcDialog.toggle($event, targetEl)"
+        class="hover:bg-tertiary-100 cursor-pointer rounded-md px-0.5 py-0 text-xs">
+        +{{ countryCode }}
+      </div>
+      <input
+        fcNumber
+        class="bg-light-highest placeholder:text-tertiary-400 m-0 w-full p-0 text-xs ring-0 focus:ring-0 focus:outline-none"
+        [type]="type"
+        [id]="uniqueId"
+        [(ngModel)]="value"
+        (input)="onValueChange(value)"
+        [disabled]="disabled"
+        [readonly]="readonly"
+        [placeholder]="placeholder"
+        (keypress)="validateNumber($event)" />
+    </div>
+  </div>
+  <button
+    type="button"
+    (click)="onRemoveValue()"
+    *ngIf="value != null && value != '' && !disabled && !readonly"
+    class="cursor-pointer">
+    <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+  </button>
+</label>
+
+<fc-dialog
+  #fcDialog
+  [title]="title"
+  [desktopView]="'overlay'"
+  [mobileView]="'overlay'">
+  <div class="bg-light-highest flex w-full flex-col gap-2 py-2 text-black">
+    <div
+      class="search border-tertiary-400 mx-2 flex overflow-clip rounded-lg border">
+      <div class="flex items-center rounded-l-xl px-2 text-xs">
+        <fa-icon
+          class="text-tertiary-400"
+          [icon]="faSearch"
+          [fixedWidth]="true"></fa-icon>
+      </div>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (input)="onSearchQueryChange()"
+        placeholder="Search Country"
+        class="block h-8 w-full flex-1 py-2 text-xs text-black outline-none placeholder:text-gray-400 focus:ring-0" />
+    </div>
+    <div
+      class="list h-[200px] min-w-[250px] space-y-1 overflow-auto rounded p-2 hover:border-transparent hover:ring-transparent">
+      <ng-container *ngFor="let countryCodeItem of countryCodeList">
+        <button
+          (click)="
+            onChangeCountryCode(countryCodeItem); fcDialog.toggle($event)
+          "
+          class="border-tertiary-100 hover:bg-tertiary-200 grid w-full cursor-pointer items-center gap-2 rounded-md border p-2 text-left text-xs">
+          <div class="flex gap-1">
+            <span class="w-10">+{{ countryCodeItem.dial_code }}</span>
+            <p>
+              {{ countryCodeItem.name }}
+            </p>
+          </div>
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</fc-dialog>

@@ -1,0 +1,103 @@
+<div class="relative flex min-h-screen flex-col bg-white sm:bg-transparent">
+  <div class="absolute inset-0 z-0 hidden sm:block">
+    <img
+      src="images/bg/login-blue.jpeg"
+      alt="Background"
+      class="h-full w-full -scale-y-100 object-cover object-center" />
+    <div class="absolute inset-0 bg-white/30 backdrop-blur-sm"></div>
+  </div>
+
+  <div class="z-20 flex flex-1 flex-col items-center justify-center px-4">
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="submit()"
+      class="mt-10 w-full max-w-md rounded-lg bg-white p-6 sm:mt-16 sm:p-9">
+      <div class="flex flex-col items-center">
+        <img
+          src="images/logos/dark-logo.png"
+          alt="logo"
+          class="w-12 object-contain" />
+        <h1 class="mt-1 text-xl font-bold">PROMANSYS</h1>
+      </div>
+
+      <h1 class="mt-4 text-center text-base font-semibold sm:text-lg">
+        Sign In
+      </h1>
+
+      <div class="mt-6 space-y-4">
+        <div class="relative">
+          <img
+            src="images/icons/user-square-login.svg"
+            alt="user"
+            class="absolute top-1/2 left-3.5 w-6 -translate-y-1/2" />
+          <input
+            type="text"
+            formControlName="username"
+            placeholder="Put Your Username or Email Here"
+            class="w-full rounded-lg border border-neutral-300 p-3 pl-14 text-xs text-black placeholder-neutral-400 focus:ring-1 focus:!ring-[#64b6df] focus:outline-none sm:text-sm" />
+          <button
+            *ngIf="loginForm.get('username')?.value !== ''"
+            type="button"
+            (click)="resetUsername()"
+            class="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer">
+            <img
+              src="images/icons/x.svg"
+              alt="x"
+              class="h-5 w-5 rounded-full p-1 hover:bg-gray-200" />
+          </button>
+        </div>
+
+        <div class="relative">
+          <img
+            src="images/icons/key-square-login.svg"
+            alt="key"
+            class="absolute top-1/2 left-3.5 w-6 -translate-y-1/2" />
+          <input
+            [type]="isPasswordVisible ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Put Your Password Here"
+            class="w-full rounded-lg border border-neutral-300 p-3 pl-14 text-xs text-black placeholder-neutral-400 focus:ring-1 focus:!ring-[#64b6df] focus:outline-none sm:text-sm" />
+          <button
+            *ngIf="loginForm.get('password')?.value !== ''"
+            type="button"
+            (click)="togglePasswordVisibility()"
+            class="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-sm text-sky-600">
+            {{ isPasswordVisible ? 'hide' : 'show' }}
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="mt-6 w-full cursor-pointer rounded-lg bg-sky-600 p-3 text-sm font-bold text-white duration-200 hover:bg-sky-700 sm:text-base"
+        [ngClass]="{
+          '!pointer-events-none !cursor-not-allowed': loading === true,
+        }">
+        <fa-icon
+          [icon]="faSpinner"
+          spin
+          class="mr-1"
+          *ngIf="loading === true"></fa-icon>
+        Continue
+      </button>
+    </form>
+  </div>
+
+  <footer
+    class="z-30 w-full px-6 py-4 text-xs text-neutral-500 lg:flex lg:items-center lg:justify-between lg:text-sm">
+    <p class="mx-auto text-center md:max-w-lg lg:mx-0 lg:max-w-xl lg:text-left">
+      These credentials have been assigned to ensure secure access and
+      personalized functionality. If you need assistance, please
+      <span class="font-semibold text-sky-600">contact</span> the
+      <span class="font-semibold text-sky-600">system administrator</span>.
+    </p>
+    <div>
+      <p class="mt-2 text-center text-neutral-700 lg:mt-0 lg:text-right">
+        © 2025 PROMANSYS. All Rights Reserved.
+      </p>
+      <p class="text-center text-xs text-gray-500">
+        Putri Nur Rahmah 3312201043
+      </p>
+    </div>
+  </footer>
+</div>

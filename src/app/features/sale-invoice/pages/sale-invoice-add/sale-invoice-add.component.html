@@ -1,0 +1,132 @@
+<div class="@container p-3">
+  <div class="mb-8 flex flex-col gap-4">
+    <div class="text-sm font-bold text-black uppercase">
+      Create New Sale Invoice
+    </div>
+
+    <form
+      [formGroup]="saleInvoiceForm"
+      class="grid w-full gap-3 md:grid-cols-2">
+      <fc-datepicker
+        formControlName="date"
+        title="Invoice Date"
+        [placeholder]="'Select Date'"></fc-datepicker>
+
+      <div
+        class="form-input border-tertiary-300 hover:bg-tertiary-100 flex cursor-pointer items-center rounded-lg border p-1">
+        <div class="flex flex-1 flex-col p-1" (click)="onSelectProject()">
+          <p class="text-2xs font-medium text-gray-700">
+            Project
+            <span *ngIf="isRequired('project_id')" class="text-error-500"
+              >*</span
+            >
+          </p>
+          <p *ngIf="selectedProject" class="text-xs">
+            {{ selectedProject.name }}
+          </p>
+          <p *ngIf="!selectedProject" class="text-tertiary-400 text-xs">
+            Select Project
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            *ngIf="selectedProject"
+            type="button"
+            class="btn-high cursor-pointer"
+            (click)="removeProject()">
+            <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+          </button>
+          <button
+            type="button"
+            class="btn-high cursor-pointer"
+            (click)="onSelectProject()">
+            <fa-icon [icon]="faChevronDown" [fixedWidth]="true"></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col justify-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3">
+        <div
+          *ngIf="remainingAmount !== null"
+          class="text-xs text-gray-600 md:space-y-4">
+          <div>
+            <span class="font-semibold text-gray-700">Remaining Amount:</span>
+            {{ remainingAmount | fcCurrency }}
+          </div>
+          <span class="italic">Please input subtotal ≤ remaining amount</span>
+        </div>
+
+        <div class="flex flex-col">
+          <fc-input-number
+            title="Subtotal"
+            placeholder="Enter Subtotal"
+            formControlName="subtotal"
+            [currency]="true">
+          </fc-input-number>
+
+          <div
+            *ngIf="saleInvoiceForm.get('subtotal')?.hasError('maxRemaining')"
+            class="mt-1 text-xs text-red-600">
+            Subtotal cannot exceed Remaining Amount ({{
+              remainingAmount | fcCurrency
+            }})
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col justify-center gap-2 rounded-md border border-gray-200 bg-gray-50 p-3">
+        <fc-select-option
+          [options]="discountTypes"
+          [optionValue]="'id'"
+          [optionLabel]="'name'"
+          formControlName="discount_type"
+          title="Discount Type"
+          [desktopView]="'overlay'"
+          [mobileView]="'dialog'"
+          [placeholder]="'Select Discount Type'"
+          class="flex-1">
+        </fc-select-option>
+
+        <div class="flex w-full items-center">
+          <fc-input-number
+            class="w-full justify-stretch"
+            title="Discount Value"
+            formControlName="discount_value"
+            placeholder="Enter Discount Amount"
+            (onBlur)="calculateGrandDiscount()"
+            mode="decimal"
+            [min]="0"
+            [max]="isPercent ? 100 : maxGrandDiscount">
+          </fc-input-number>
+          <span
+            *ngIf="isPercent"
+            class="flex items-center rounded-r-lg border border-l-0 border-gray-300 bg-gray-700 px-3 text-sm text-gray-300 select-none">
+            %
+          </span>
+        </div>
+      </div>
+    </form>
+
+    <div class="mt-4 flex flex-col items-end text-sm">
+      <div
+        class="ring-tertiary-200 w-full max-w-sm rounded-md bg-white p-4 ring-1">
+        <div class="flex justify-between py-1">
+          <span class="text-gray-600">Grand Total</span>
+          <span class="font-medium text-black">
+            {{ grandTotal | fcCurrency }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 flex justify-end gap-3">
+      <button
+        class="flex cursor-pointer items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+        (click)="submit()">
+        Submit
+      </button>
+    </div>
+  </div>
+</div>

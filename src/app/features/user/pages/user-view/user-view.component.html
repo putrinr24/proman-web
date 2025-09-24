@@ -1,0 +1,65 @@
+<div class="@container p-3">
+  <div class="mb-8 flex flex-col gap-4">
+    <div class="flex flex-col">
+      <div class="flex w-full flex-row items-center justify-between gap-2">
+        <h1 class="text-sm font-bold text-black uppercase">User Detail</h1>
+        <div class="flex gap-1">
+          <ng-container *ngFor="let button of actionButtons">
+            <button
+              type="button"
+              class="btn-high flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-gray-400 hover:bg-gray-100"
+              [pTooltip]="button.label"
+              (click)="button.action()">
+              <fc-svg-loader
+                [path]="button.icon"
+                [className]="'[&>svg]:size-4 text-gray-400'"></fc-svg-loader>
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <form
+      [formGroup]="userForm"
+      class="grid w-full gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <fc-input-text
+        title="Name"
+        formControlName="name"
+        placeholder="Enter Name" />
+      <fc-select-option
+        [options]="userRoles"
+        [optionValue]="'id'"
+        [optionLabel]="'name'"
+        formControlName="role"
+        title="Role"
+        [desktopView]="'overlay'"
+        [mobileView]="'dialog'"
+        [placeholder]="'Select Role'"
+        [searchable]="true"
+        class="flex-1" />
+      <fc-input-tel
+        title="Phone Number"
+        formControlName="phone_no"
+        placeholder="Enter Phone Number" />
+      <fc-input-text
+        title="Email"
+        formControlName="email"
+        placeholder="Enter Email" />
+      <fc-input-text
+        type="username"
+        title="Username"
+        formControlName="username"
+        placeholder="Enter Username" />
+      <fc-textarea
+        placeholder="Enter Address"
+        formControlName="address"
+        title="Address"></fc-textarea>
+    </form>
+    <div class="mt-4 flex justify-end gap-3">
+      <button
+        class="flex cursor-pointer items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+        (click)="submit()">
+        Save
+      </button>
+    </div>
+  </div>
+</div>

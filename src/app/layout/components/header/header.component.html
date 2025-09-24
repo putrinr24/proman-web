@@ -1,0 +1,148 @@
+<div class="@container">
+  <div
+    class="flex flex-wrap items-center gap-3 border-b border-gray-300 bg-white p-3 @xl:flex-nowrap @xl:px-3">
+    <div class="flex flex-row items-center gap-2">
+      <div class="flex items-center">
+        <button
+          type="button"
+          (click)="toggleSidebar()"
+          class="hover:bg-tertiary-200 flex cursor-pointer rounded-lg p-2 transition-all duration-500 ease-in-out">
+          <fa-icon
+            [fixedWidth]="true"
+            [icon]="faBars"
+            class="text-xs text-black"></fa-icon>
+        </button>
+      </div>
+      <div class="flex flex-row items-center justify-center gap-2">
+        <img
+          src="images/logos/dark-logo.png"
+          alt=""
+          class="h-8 flex-none object-contain object-left drop-shadow-lg" />
+        <h3 class="hidden text-lg font-medium text-black @sm:text-xl @md:block">
+          PROMANSYS
+        </h3>
+      </div>
+    </div>
+
+    <div class="hidden items-center @md:block @xl:flex">
+      <button
+        class="hover:bg-tertiary-200 cursor-pointer rounded-full px-1.5 py-1 text-black"
+        (click)="goToPrevPage()">
+        <fa-icon [fixedWidth]="true" [icon]="faChevronLeft"></fa-icon>
+      </button>
+      <button
+        class="hover:bg-tertiary-200 cursor-pointer rounded-full px-1.5 py-1 text-black"
+        (click)="goToForwardPage()">
+        <fa-icon [fixedWidth]="true" [icon]="faChevronRight"></fa-icon>
+      </button>
+    </div>
+    <div class="flex flex-1 justify-end gap-3">
+      <div class="flex gap-2">
+        <!-- <button
+          (click)="userDrawer.toggle()"
+          type="button"
+          class="fc-animate-translate-up text-2xs flex h-8 w-8 cursor-pointer overflow-hidden rounded-full border border-white bg-white text-black">
+          <fa-icon *ngIf="false" [icon]="faUser"></fa-icon>
+          <img
+            [src]="user.url ? user.url : '/images/icons/user-placeholder.svg'"
+            class="aspect-square object-cover" />
+        </button> -->
+        <button
+          (click)="userDrawer.toggle()"
+          type="button"
+          class="fc-animate-translate-up flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-100 p-2 text-xs font-semibold text-black ring-1 ring-black">
+          {{ getUserInitials(user) }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<fc-drawer #userDrawer [header]="false">
+  <div
+    class="bg-tertiary-100/80 h-full w-full overflow-y-auto rounded-l-xl text-xs [backdrop-filter:blur(3px)]">
+    <div class="header px-4 py-6 pb-3">
+      <div class="flex items-center gap-2">
+        <button
+          class="md-hidden cursor-pointer"
+          type="submit"
+          type="button"
+          (click)="userDrawer.hide()">
+          <fa-icon [icon]="faChevronLeft" [fixedWidth]="true"></fa-icon>
+        </button>
+        <fc-image-preview
+          [src]="user.url ? user.url : '/images/icons/user-placeholder.svg'"
+          class="[&>.img]:size-8 [&>.img]:overflow-hidden [&>.img]:rounded"></fc-image-preview>
+        <div>
+          <p class="text-xs">{{ user.name }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menus mb-3 px-2">
+      <div class="md:hidden">
+        <button
+          type="button"
+          class="hover:bg-tertiary-300 flex w-full cursor-pointer gap-3 rounded-md px-2 py-2 text-left"
+          (click)="showMenus = !showMenus">
+          <fa-icon [icon]="faBars"></fa-icon>
+          <span class="flex-1"> Menu </span>
+          <div
+            class="transition-all duration-500 ease-in-out"
+            [ngClass]="{
+              'rotate-180': showMenus,
+              'rotate-0': !showMenus,
+            }">
+            <fa-icon [icon]="faChevronDown" [fixedWidth]="true"></fa-icon>
+          </div>
+        </button>
+        <div class="ml-6">
+          <div
+            class="themes overflow-hidden transition-all ease-in-out"
+            [ngClass]="{
+              'h-0 duration-500': !showMenus,
+              'h-fit duration-300': showMenus,
+            }">
+            <div
+              class="options transition duration-500 ease-in-out"
+              [ngClass]="{
+                '-translate-y-full': !showMenus,
+                'delay-75': showMenus,
+              }">
+              <ng-container *ngFor="let menu of menus">
+                <ng-container *ngIf="!menu.parentRoute">
+                  <button
+                    type="button"
+                    class="hover:bg-tertiary-300 flex w-full cursor-pointer gap-3 rounded-md px-2 py-2 text-left"
+                    [routerLink]="[menu.route]"
+                    (click)="userDrawer.hide()">
+                    {{ menu.name }}
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="menu.parentRoute">
+                  <button
+                    type="button"
+                    class="hover:bg-tertiary-300 flex w-full gap-3 rounded-md px-2 py-2 text-left"
+                    [routerLink]="[subMenu.route]"
+                    (click)="userDrawer.hide()"
+                    *ngFor="let subMenu of menu.subMenus">
+                    {{ subMenu.name }}
+                  </button>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="hover:bg-tertiary-300 flex w-full cursor-pointer gap-3 rounded-md px-2 py-2 text-left"
+        (click)="logout()">
+        <fa-icon [icon]="faPowerOff"></fa-icon>
+        Logout
+      </button>
+    </div>
+
+    <hr class="border-tertiary-300 border" />
+  </div>
+</fc-drawer>

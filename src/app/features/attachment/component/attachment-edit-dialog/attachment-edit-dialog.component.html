@@ -1,0 +1,54 @@
+<div class="bg-light-highest space-y-3 rounded-lg p-5 backdrop-blur-sm">
+  <div class="flex items-center">
+    <h2 class="flex-1 text-sm font-medium">{{ title }}</h2>
+    <button
+      class="hover:bg-tertiary-100 cursor-pointer rounded-md p-2"
+      (click)="onClose()">
+      <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="attachmentForm" class="grid w-full grid-cols-1 gap-3">
+    <div
+      class="form-input border-tertiary-300 hover:bg-tertiary-100 flex cursor-pointer items-center rounded-lg border p-1">
+      <div class="flex flex-1 flex-col p-1" (click)="onSelectFeature()">
+        <p class="text-2xs font-medium text-gray-700">
+          Feature
+          <span *ngIf="isRequired('feature_id')" class="text-error-500">*</span>
+        </p>
+        <p *ngIf="selectedFeature" class="text-xs">
+          {{ selectedFeature.name }}
+        </p>
+        <p *ngIf="!selectedFeature" class="text-tertiary-400 text-xs">
+          Select Feature
+        </p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button
+          *ngIf="selectedFeature"
+          type="button"
+          class="btn-high"
+          (click)="removeFeature()">
+          <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+        </button>
+        <button type="button" (click)="onSelectFeature()">
+          <fa-icon [icon]="faChevronDown" [fixedWidth]="true"></fa-icon>
+        </button>
+      </div>
+    </div>
+    <fc-textarea
+      placeholder="Enter Note"
+      formControlName="note"
+      title="Note"
+      [rows]="3">
+    </fc-textarea>
+  </form>
+
+  <div class="mt-4 flex justify-end gap-3">
+    <button
+      class="flex cursor-pointer items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+      (click)="submit()">
+      Save
+    </button>
+  </div>
+</div>

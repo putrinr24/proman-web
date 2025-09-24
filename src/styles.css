@@ -1,1 +1,418 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss';
+@import 'tailwindcss-primeui';
+@import 'tailwindcss/utilities';
+
+* {
+  font-family: 'inter', sans-serif;
+}
+
+/* Regular (normal) */
+@font-face {
+  font-family: 'inter';
+  src: url('./assets/fonts/inter/Inter_18pt-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Regular (italic) */
+@font-face {
+  font-family: 'inter';
+  src: url('./assets/fonts/inter/Inter_18pt-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* Bold (normal) */
+@font-face {
+  font-family: 'inter';
+  src: url('./assets/fonts/inter/Inter_18pt-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Bold (italic) */
+@font-face {
+  font-family: 'inter';
+  src: url('./assets/fonts/inter/Inter_18pt-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* Light (normal) */
+@font-face {
+  font-family: 'inter';
+  src: url('./assets/fonts/inter/Inter_18pt-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* Light (italic) */
+@font-face {
+  font-family: 'inter';
+  src: url('./assets/fonts/inter/Inter_18pt-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+/* Extra Bold (normal) */
+@font-face {
+  font-family: 'inter';
+  src: url('./assets/fonts/inter/Inter_18pt-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+/* Extra Bold (italic) */
+@font-face {
+  font-family: 'inter';
+  src: url('./assets/fonts/inter/Inter_18pt-ExtraBoldItalic.ttf')
+    format('truetype');
+  font-weight: 800;
+  font-style: italic;
+}
+
+/* Black (normal) */
+@font-face {
+  font-family: 'inter';
+  src: url('./assets/fonts/inter/Inter_18pt-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* Black (italic) */
+@font-face {
+  font-family: 'inter';
+  src: url('./assets/fonts/inter/Inter_18pt-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Questrial';
+  src: url('./assets/fonts/questrial/Questrial-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@theme {
+  /* Primary Colors */
+  --color-primary-25: #fff8f2;
+  --color-primary-50: #ffeedd;
+  --color-primary-100: #ffd9bb;
+  --color-primary-200: #ffc199;
+  --color-primary-300: #ffa366;
+  --color-primary-400: #ff8533;
+  --color-primary-500: #ea6c12; /* Base */
+  --color-primary-600: #cc5e10;
+  --color-primary-700: #a34b0d;
+  --color-primary-800: #7a370a;
+  --color-primary-900: #5c2a07;
+
+  /* Secondary Colors */
+  --color-secondary-25: #f3f7ff;
+  --color-secondary-50: #e0edff;
+  --color-secondary-100: #bfd9ff;
+  --color-secondary-200: #99c1ff;
+  --color-secondary-300: #66a3ff;
+  --color-secondary-400: #3385ff;
+  --color-secondary-500: #0066ff;
+  --color-secondary-600: #0057db;
+  --color-secondary-700: #0047b3;
+  --color-secondary-800: #00388a;
+  --color-secondary-900: #002a66;
+
+  /* Tertiary Colors */
+  --color-tertiary-25: #fcfcfd;
+  --color-tertiary-50: #f9fafb;
+  --color-tertiary-100: #f2f4f7;
+  --color-tertiary-200: #eaecf0;
+  --color-tertiary-300: #d0d5dd;
+  --color-tertiary-400: #98a2b3;
+  --color-tertiary-500: #667085;
+  --color-tertiary-600: #475467;
+  --color-tertiary-700: #344054;
+  --color-tertiary-800: #1d2939;
+  --color-tertiary-900: #101828;
+
+  /* Success Colors */
+  --color-success-25: #f6fef9;
+  --color-success-50: #ecfdf3;
+  --color-success-100: #d1fadf;
+  --color-success-200: #a6f4c5;
+  --color-success-300: #6ce9a6;
+  --color-success-400: #32d583;
+  --color-success-500: #12b76a;
+  --color-success-600: #039855;
+  --color-success-700: #027a48;
+  --color-success-800: #05603a;
+  --color-success-900: #054f31;
+
+  /* Warning Colors */
+  --color-warning-25: #fffcf5;
+  --color-warning-50: #fffaeb;
+  --color-warning-100: #fef0c7;
+  --color-warning-200: #fedf89;
+  --color-warning-300: #fec84b;
+  --color-warning-400: #fdb022;
+  --color-warning-500: #f79009;
+  --color-warning-600: #dc6803;
+  --color-warning-700: #b54708;
+  --color-warning-800: #93370d;
+  --color-warning-900: #7a2e0e;
+
+  /* Information Colors */
+  --color-information-25: #f5faff;
+  --color-information-50: #eff8ff;
+  --color-information-100: #d1e9ff;
+  --color-information-200: #b2ddff;
+  --color-information-300: #84caff;
+  --color-information-400: #53b1fd;
+  --color-information-500: #2e90fa;
+  --color-information-600: #1570ef;
+  --color-information-700: #175cd3;
+  --color-information-800: #1849a9;
+  --color-information-900: #194185;
+
+  /* Error Colors */
+  --color-error-25: #fffbfa;
+  --color-error-50: #fef3f2;
+  --color-error-100: #fef3f2;
+  --color-error-200: #fecdca;
+  --color-error-300: #fda29b;
+  --color-error-400: #f97066;
+  --color-error-500: #f04438;
+  --color-error-600: #d92d20;
+  --color-error-700: #b42318;
+  --color-error-800: #912018;
+  --color-error-900: #7a271a;
+
+  /* Custom Colors */
+  --color-primary: #ea6c12;
+  --color-primary-dark: #a34b0d;
+  --color-primary-light: #ffeedd;
+
+  --color-dark-lowest: #4a2b13; /* agak cokelat gelap */
+  --color-dark-low: #2b1a0d;
+  --color-dark-high: #1a1008;
+  --color-dark-highest: #100b05;
+
+  --color-light-lowest: #ffeadb;
+  --color-light-low: #fff4eb;
+  --color-light-high: #ffd6a0;
+  --color-light-highest: #ffffff;
+
+  --text-2xs: 0.625rem;
+
+  --ease-def-jam: ease-[cubic-bezier(0.07, 0.52, 0.29, 0.93)];
+
+  @keyframes fc-delay-show-animation {
+    from {
+      background-position: 0% center;
+    }
+    to {
+      background-position: -500% center;
+    }
+  }
+}
+
+body {
+  @apply bg-white;
+}
+
+.container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+:root {
+  --p-overlay-popover-padding: 0.5rem;
+  --font-display: 'Inter', sans-serif;
+}
+
+.fc-animate-scale {
+  @apply transition ease-in-out hover:scale-150;
+}
+.fc-animate-translate-up {
+  @apply transition ease-in-out hover:-translate-y-1;
+}
+
+/* Scroll bar */
+/* Width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  position: absolute;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: transparent;
+  border-radius: 8px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply bg-tertiary-200 rounded-md;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-tertiary-200 rounded-md;
+}
+
+/* Button */
+.btn-slate {
+  @apply border-slate-500 bg-slate-500 text-white/80;
+}
+.btn-slate:not([disabled]):hover {
+  @apply bg-slate-600;
+}
+.btn-gray {
+  @apply border-gray-500 bg-gray-500 text-white/80;
+}
+.btn-gray:not([disabled]):hover {
+  @apply bg-gray-600;
+}
+.btn-emerald {
+  @apply border-emerald-500 bg-emerald-500 text-white/80;
+}
+.btn-emerald:not([disabled]):hover {
+  @apply bg-emerald-600;
+}
+.btn-sky {
+  @apply border-sky-500 bg-sky-500 text-white/80;
+}
+.btn-sky:not([disabled]):hover {
+  @apply bg-sky-600;
+}
+.btn-teal {
+  @apply border-teal-500 bg-teal-500 text-white/80;
+}
+.btn-teal:not([disabled]):hover {
+  @apply bg-teal-600;
+}
+.btn-orange {
+  @apply border-orange-500 bg-orange-500 text-white/80;
+}
+.btn-orange:not([disabled]):hover {
+  @apply bg-orange-600;
+}
+.btn-red {
+  @apply border-red-500 bg-red-500 text-white/80;
+}
+.btn-red:not([disabled]):hover {
+  @apply bg-red-600;
+}
+.btn-cyan {
+  @apply border-cyan-500 bg-cyan-500 text-white/80;
+}
+.btn-cyan:not([disabled]):hover {
+  @apply bg-cyan-600;
+}
+
+/* Dialog */
+.p-dialog.p-confirm-dialog {
+  @apply bg-light-low;
+}
+.p-dialog.p-confirm-dialog .p-dialog-header {
+  @apply p-3 text-base font-semibold;
+}
+.p-dialog.p-confirm-dialog .p-dialog-header .p-dialog-title {
+  @apply text-base font-semibold;
+}
+.p-dialog.p-confirm-dialog .p-dialog-content {
+  @apply p-3 text-sm;
+}
+.p-dialog.p-confirm-dialog .p-dialog-content i {
+  @apply text-sm;
+}
+.p-dialog.p-confirm-dialog .p-dialog-footer {
+  @apply p-3;
+}
+.p-dialog.p-confirm-dialog .p-dialog-footer button {
+  @apply border-none px-3 py-1 text-xs ring-0;
+}
+
+/* FC */
+.fc-toast {
+  @apply z-[100];
+}
+.fc-confirm {
+  @apply z-[90];
+}
+.fc-image-preview {
+  @apply z-[80];
+}
+.p-dialog-mask.p-component-overlay {
+  @apply z-[70];
+}
+.fc-drawer {
+  @apply z-[60];
+}
+.fc-mobile-nav {
+  @apply z-[50];
+}
+
+.overlay-scroll {
+  /* Overlay scrollbar without extra width taken up */
+  position: relative;
+  overflow-y: overlay; /* This will overlay the scrollbar on content */
+  scrollbar-gutter: stable;
+}
+
+/* Chrome, Safari, and Opera */
+.overlay-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overlay-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3); /* Customize scrollbar color */
+  border-radius: 4px;
+}
+
+/* Firefox */
+.overlay-scroll {
+  scrollbar-width: thin; /* Makes the scrollbar thin */
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+  scrollbar-gutter: stable;
+}
+
+@layer utilities {
+  .custom-icon {
+    @apply hover:bg-tertiary-50 grid size-8 cursor-pointer place-items-center;
+  }
+
+  .custom-container {
+    @apply mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .text-responsive {
+    font-size: calc(1.1vw + 1.2em);
+  }
+
+  .icon-wrapper {
+    @apply hover:bg-tertiary-50 grid size-8 cursor-pointer place-items-center rounded-lg;
+  }
+
+  .mini-shadow {
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.p-tooltip {
+  font-size: 0.75rem !important;
+}
+
+.p-dialog-mask {
+  z-index: 500 !important;
+}

@@ -1,0 +1,150 @@
+<ng-container *ngIf="authUser as user">
+  <div class="@container space-y-6 p-3">
+    <ng-container *ngIf="authUser?.role === 0">
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-2xl bg-white p-6 shadow-sm">
+          <h3 class="text-sm font-medium text-gray-500">Project Managers</h3>
+          <p class="mt-2 text-3xl font-semibold text-gray-900">
+            {{ pmCount }}
+          </p>
+        </div>
+
+        <div class="rounded-2xl bg-white p-6 shadow-sm">
+          <h3 class="text-sm font-medium text-gray-500">Developers</h3>
+          <p class="mt-2 text-3xl font-semibold text-gray-900">
+            {{ devCount }}
+          </p>
+        </div>
+
+        <div class="rounded-2xl bg-white p-6 shadow-sm">
+          <h3 class="text-sm font-medium text-gray-500">Customers</h3>
+          <p class="mt-2 text-3xl font-semibold text-gray-900">
+            {{ custCount }}
+          </p>
+        </div>
+
+        <div class="rounded-2xl bg-white p-6 shadow-sm">
+          <h3 class="text-sm font-medium text-gray-500">Projects</h3>
+          <p class="mt-2 text-3xl font-semibold text-gray-900">
+            {{ projectCount }}
+            <span class="z-10 text-xs text-gray-500">
+              ( +{{ projectLastMonth }} from last month )
+            </span>
+          </p>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="rounded-2xl bg-white p-6 shadow-sm">
+      <h3 class="text-sm font-medium text-gray-500">
+        Feature Progress Summary
+      </h3>
+
+      <div class="mt-4 space-y-4">
+        <div class="group relative">
+          <div class="mb-1 flex justify-between text-xs text-gray-500">
+            <span>Draft</span>
+            <span>{{ draftPercent }}%</span>
+          </div>
+          <div class="h-4 w-full cursor-pointer rounded-full bg-gray-200">
+            <div
+              class="h-4 rounded-full bg-yellow-500"
+              [style.width.%]="draftPercent"></div>
+          </div>
+          <p class="mt-1 text-xs text-gray-500">
+            {{ draftFeatures }}/{{ totalFeatures }} features in draft
+          </p>
+
+          <div
+            *ngIf="draftFeatureList.length > 0"
+            class="absolute top-full left-0 z-10 mt-1 hidden rounded bg-gray-600 p-2 text-xs text-white shadow-lg group-hover:block">
+            <ul>
+              <li *ngFor="let f of draftFeatureList">
+                {{ f.name }}
+                <span class="text-gray-300">({{ f.project }})</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="group relative">
+          <div class="mb-1 flex justify-between text-xs text-gray-500">
+            <span>In Progress</span>
+            <span>{{ progressPercent }}%</span>
+          </div>
+          <div class="h-4 w-full cursor-pointer rounded-full bg-gray-200">
+            <div
+              class="h-4 rounded-full bg-blue-500"
+              [style.width.%]="progressPercent"></div>
+          </div>
+          <p class="mt-1 text-xs text-gray-500">
+            {{ progressFeatures }}/{{ totalFeatures }} features in progress
+          </p>
+
+          <div
+            *ngIf="progressFeatureList.length > 0"
+            class="absolute top-full left-0 z-10 mt-1 hidden rounded bg-gray-600 p-2 text-xs text-white shadow-lg group-hover:block">
+            <ul>
+              <li *ngFor="let f of progressFeatureList">
+                {{ f.name }}
+                <span class="text-gray-300">({{ f.project }})</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="group relative">
+          <div class="mb-1 flex justify-between text-xs text-gray-500">
+            <span>Completed</span>
+            <span>{{ completedPercent }}%</span>
+          </div>
+          <div class="h-4 w-full cursor-pointer rounded-full bg-gray-200">
+            <div
+              class="h-4 rounded-full bg-green-500"
+              [style.width.%]="completedPercent"></div>
+          </div>
+          <p class="mt-1 text-xs text-gray-500">
+            {{ completedFeatures }}/{{ totalFeatures }} features completed
+          </p>
+
+          <div
+            *ngIf="completedFeatureList.length > 0"
+            class="absolute top-full left-0 z-10 mt-1 hidden rounded bg-gray-600 p-2 text-xs text-white shadow-lg group-hover:block">
+            <ul>
+              <li *ngFor="let f of completedFeatureList">
+                {{ f.name }}
+                <span class="text-gray-300">({{ f.project }})</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="group relative">
+          <div class="mb-1 flex justify-between text-xs text-gray-500">
+            <span>Cancelled</span>
+            <span>{{ cancelledPercent }}%</span>
+          </div>
+          <div class="h-4 w-full cursor-pointer rounded-full bg-gray-200">
+            <div
+              class="h-4 rounded-full bg-red-500"
+              [style.width.%]="cancelledPercent"></div>
+          </div>
+          <p class="mt-1 text-xs text-gray-500">
+            {{ cancelledFeatures }}/{{ totalFeatures }} features cancelled
+          </p>
+
+          <div
+            *ngIf="cancelledFeatureList.length > 0"
+            class="absolute top-full left-0 z-10 mt-1 hidden rounded bg-gray-600 p-2 text-xs text-white shadow-lg group-hover:block">
+            <ul>
+              <li *ngFor="let f of cancelledFeatureList">
+                {{ f.name }}
+                <span class="text-gray-300">({{ f.project }})</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,84 @@
+<div class="bg-light-highest space-y-3 rounded-lg p-5 backdrop-blur-sm">
+  <div class="flex items-center">
+    <h2 class="flex-1 text-sm font-medium">{{ title }}</h2>
+    <button
+      class="hover:bg-tertiary-100 cursor-pointer rounded-md p-2"
+      (click)="onClose()">
+      <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+    </button>
+  </div>
+
+  <form
+    [formGroup]="featureForm"
+    class="grid w-full grid-cols-1 gap-3 md:grid-cols-2">
+    <fc-input-text
+      title="Feature Name"
+      formControlName="name"
+      placeholder="Enter Feature Name" />
+    <fc-input-number
+      title="Price"
+      placeholder="Enter Price"
+      formControlName="price"
+      [currency]="true" />
+    <div
+      class="form-input border-tertiary-300 hover:bg-tertiary-100 flex cursor-pointer items-center rounded-lg border p-1">
+      <div class="flex flex-1 flex-col p-1" (click)="onAssignedToDeveloper()">
+        <p class="text-2xs font-medium text-gray-700">
+          Developer
+          <span *ngIf="isRequired('assigned_to')" class="text-error-500"
+            >*</span
+          >
+        </p>
+        <p *ngIf="selectedDeveloper" class="text-xs">
+          {{ selectedDeveloper.name }}
+        </p>
+        <p *ngIf="!selectedDeveloper" class="text-tertiary-400 text-xs">
+          Select Developer
+        </p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button
+          *ngIf="selectedDeveloper"
+          type="button"
+          class="btn-high"
+          (click)="removeDeveloper()">
+          <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+        </button>
+        <button type="button" (click)="onAssignedToDeveloper()">
+          <fa-icon [icon]="faChevronDown" [fixedWidth]="true"></fa-icon>
+        </button>
+      </div>
+    </div>
+    <!-- <fc-select-option
+      [options]="statuses"
+      [optionValue]="'id'"
+      [optionLabel]="'name'"
+      formControlName="status"
+      title="Status"
+      [desktopView]="'overlay'"
+      [mobileView]="'dialog'"
+      [placeholder]="'Select Status'"
+      [searchable]="true"
+      class="flex-1" /> -->
+    <fc-input-text
+      title="Status"
+      [value]="getFeatureStatusLabel(featureForm.get('status')?.value)"
+      placeholder="Enter Status Name"
+      [readonly]="true" />
+    <div class="col-span-1 md:col-span-2">
+      <fc-textarea
+        placeholder="Enter Note"
+        formControlName="note"
+        title="Note"
+        [rows]="3"></fc-textarea>
+    </div>
+  </form>
+
+  <div class="mt-4 flex justify-end gap-3">
+    <button
+      class="flex cursor-pointer items-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-sky-700 focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:outline-none"
+      (click)="submit()">
+      Submit
+    </button>
+  </div>
+</div>

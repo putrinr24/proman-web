@@ -1,0 +1,26 @@
+<div class="flex h-screen w-screen flex-col">
+  <app-header
+    class="relative z-50"
+    (onToggleSidebar)="toggleSidebar()"
+    [showSidebar]="sidebarConfig.showSidebar"></app-header>
+  <div class="relative flex min-h-0 flex-1">
+    <div
+      class="absolute top-0 left-0 z-40 h-full w-[240px] flex-none overflow-y-auto shadow-md transition-all duration-500 ease-in-out md:relative md:shadow-none lg:w-[240px]"
+      [ngClass]="{
+        'ml-0 block md:w-fit': sidebarConfig.showSidebar,
+        '-ml-[240px] block': !sidebarConfig.showSidebar,
+      }">
+      <app-sidebar
+        [showSidebar]="sidebarConfig.showSidebar"
+        [hideWhenChangeRoute]="sidebarConfig.hideWhenChangeRoute"></app-sidebar>
+    </div>
+    <div class="relative h-full flex-1 overflow-y-auto">
+      <div
+        (click)="toggleSidebar()"
+        class="fixed inset-0 z-30 bg-black/10 backdrop-blur-sm md:hidden"
+        [ngClass]="{ hidden: !sidebarConfig.showSidebar }"></div>
+
+      <router-outlet> </router-outlet>
+    </div>
+  </div>
+</div>

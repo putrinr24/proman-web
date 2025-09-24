@@ -1,0 +1,44 @@
+<div class="flex justify-end gap-4">
+  <div class="hidden items-center @xl:flex">
+    <select
+      class="select-wrapper border-tertiary-500 h-full rounded-md border px-2 text-xs focus:border focus:border-[#3789c1] focus:outline-none enabled:cursor-pointer"
+      [(ngModel)]="rows"
+      (change)="updatePage()">
+      <option
+        class="hover:bg-[#3789c1]"
+        *ngFor="let option of rowOptions"
+        [value]="option">
+        {{ option }} <span class="@xl:hidden"> per page</span>
+      </option>
+    </select>
+  </div>
+  <div class="pagination flex items-center gap-2">
+    <div
+      (click)="onOpenPaginationDialog()"
+      class="hover:bg-tertiary-100 flex h-full cursor-pointer items-center rounded px-2">
+      <p class="text-xs text-gray-700">
+        <span class="font-bold"
+          >{{ totalRecords === 0 ? 0 : (page - 1) * rows + 1 }}-{{
+            (page - 1) * rows + +rows > totalRecords
+              ? totalRecords
+              : (page - 1) * rows + +rows
+          }}</span
+        >
+        of
+        {{ totalRecords }}
+      </p>
+    </div>
+    <button
+      class="bg-tertiary-100 enabled:hover:bg-tertiary-200 flex h-8 w-8 items-center justify-center rounded-md text-xs enabled:cursor-pointer"
+      (click)="onPrevPage()"
+      [disabled]="page == 1">
+      <fa-icon [icon]="faChevronLeft"></fa-icon>
+    </button>
+    <button
+      class="bg-tertiary-100 enabled:hover:bg-tertiary-200 flex h-8 w-8 items-center justify-center rounded-md text-xs enabled:cursor-pointer"
+      (click)="onNextPage()"
+      [disabled]="page == totalPages">
+      <fa-icon [icon]="faChevronRight"></fa-icon>
+    </button>
+  </div>
+</div>

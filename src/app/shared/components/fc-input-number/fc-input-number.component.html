@@ -1,0 +1,39 @@
+<label
+  class="form-input border-tertiary-300 bg-light-highest flex items-center gap-2 rounded-lg border p-2 focus-within:!border focus-within:!border-[#64b6df]"
+  [ngClass]="{
+    'opacity-50': disabled,
+    'border-tertiary-300': !isInvalid,
+    'border-error-500': isInvalid,
+  }"
+  [for]="uniqueId">
+  <div *ngIf="title" class="flex flex-1 flex-col">
+    <p class="text-2xs m-0 block p-0 leading-5 font-medium text-gray-700">
+      {{ title }}
+      <span *ngIf="required" class="text-red-500">*</span>
+    </p>
+    <input
+      #fcNumber
+      currencyMask
+      class="bg-light-highest placeholder:text-tertiary-400 m-0 w-full p-0 text-xs ring-0 focus:ring-0 focus:outline-none"
+      [id]="uniqueId"
+      [(ngModel)]="value"
+      (blur)="onValueChange(value)"
+      [min]="min"
+      [max]="max"
+      [disabled]="disabled"
+      [readonly]="readonly"
+      [placeholder]="placeholder"
+      [options]="currencyOptions" />
+  </div>
+  <button
+    type="button"
+    (click)="onRemoveValue()"
+    *ngIf="value != null && value != 0 && !disabled && !readonly"
+    class="cursor-pointer">
+    <fa-icon [icon]="faTimes" [fixedWidth]="true"></fa-icon>
+  </button>
+  <fc-calculator
+    *ngIf="!disabled && !readonly"
+    (onSubmit)="onValueChange($event)"
+    [target]="fcNumber"></fc-calculator>
+</label>

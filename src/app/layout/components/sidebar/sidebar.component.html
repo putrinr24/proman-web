@@ -1,0 +1,49 @@
+<div class="font-poppins bg-tertiary-100 flex h-full w-full flex-1 flex-col">
+  <div class="h-full flex-1 overflow-y-auto">
+    <nav aria-label="Sidebar" class="space-y-1 p-2 pt-4">
+      <div
+        *ngFor="let mainMenu of menuWithSequence"
+        class="relative w-full items-center text-xs">
+        <ng-container *ngIf="mainMenu.visible">
+          <ng-container *ngIf="!mainMenu.subMenus">
+            <a
+              class="relative flex flex-1 cursor-pointer items-center gap-2 rounded-lg px-3 py-2 transition-colors duration-100 hover:bg-sky-700 hover:fill-white hover:text-white"
+              [routerLink]="mainMenu.route"
+              (click)="toggleSidebar()"
+              routerLinkActive="fill-white text-white bg-sky-600">
+              <fc-svg-loader [path]="mainMenu.icon" className=" [&>svg]:size-4">
+              </fc-svg-loader>
+              <div class="md:hidden lg:block">{{ mainMenu.name }}</div>
+            </a>
+          </ng-container></ng-container
+        >
+      </div>
+
+      <hr
+        *ngIf="hasVisibleMenuWithSequence"
+        class="border-tertiary-300 my-4 border" />
+
+      <div
+        *ngFor="let mainMenu of menuWithoutSequence"
+        class="relative w-full items-center text-xs">
+        <ng-container *ngIf="mainMenu.visible">
+          <ng-container *ngIf="!mainMenu.subMenus">
+            <a
+              class="relative flex flex-1 cursor-pointer items-center gap-2 rounded-lg px-3 py-2 transition-colors duration-100 hover:bg-sky-700 hover:fill-white hover:text-white"
+              [routerLink]="mainMenu.route"
+              [routerLinkActiveOptions]="{ exact: false }"
+              routerLinkActive="fill-white text-white bg-sky-600"
+              (click)="toggleSidebar()">
+              <fc-svg-loader [path]="mainMenu.icon" className="[&>svg]:size-4">
+              </fc-svg-loader>
+              <div class="md:hidden lg:block">{{ mainMenu.name }}</div>
+            </a>
+          </ng-container>
+        </ng-container>
+      </div>
+    </nav>
+  </div>
+  <div class="p-2 text-center text-xs text-gray-500">
+    © 2025 Putri Nur Rahmah 3312201043
+  </div>
+</div>

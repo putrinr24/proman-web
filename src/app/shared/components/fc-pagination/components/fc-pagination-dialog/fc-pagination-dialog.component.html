@@ -1,0 +1,51 @@
+<div class="bg-light-highest flex h-[20rem] flex-col px-5 py-3">
+  <div class="flex items-center">
+    <h3 class="flex-1 text-sm font-medium">{{ title }}</h3>
+    <button
+      class="hover:bg-tertiary-100 cursor-pointer rounded-md p-2"
+      (click)="onClose()">
+      <fa-icon [fixedWidth]="true" [icon]="faTimes"></fa-icon>
+    </button>
+  </div>
+  <div class="mt-3 flex-1 space-y-3 overflow-y-auto pb-10 text-xs">
+    <!-- feature: item per page -->
+    <div class="item-per-page space-y-3">
+      <div class="item-per-page-options">
+        <h2 class="mb-3 font-medium">Item Per Page</h2>
+        <div class="flex flex-wrap gap-3">
+          <button
+            type="button"
+            autofocus
+            class="cursor-pointer rounded-full border border-slate-300 px-2 py-1"
+            [ngClass]="{
+              'bg-tertiary-100': itemPerPageOption.value == itemPerPage,
+            }"
+            *ngFor="let itemPerPageOption of itemPerPageOptions"
+            (click)="itemPerPage = itemPerPageOption.value">
+            {{ itemPerPageOption.label }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- feature: On Page -->
+    <div class="form">
+      <h2 class="mb-3 font-medium">Page</h2>
+      <p-inputNumber
+        class="w-full"
+        styleClass="text-slate-300 border rounded-md bg-light-low border-light-lowest  h-8 w-full"
+        [(ngModel)]="curPage"
+        [showButtons]="true"
+        [min]="1"
+        [max]="totalPages"
+        mode="decimal"></p-inputNumber>
+    </div>
+  </div>
+  <div class="flex justify-end gap-3 pt-3">
+    <button
+      type="button"
+      class="fc-animate-translate-up bg-tertiary-100 hover:bg-tertiary-200 flex cursor-pointer items-center gap-2 rounded-md p-2 text-sm"
+      (click)="submit()">
+      Submit
+    </button>
+  </div>
+</div>

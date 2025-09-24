@@ -1,0 +1,22 @@
+<div class="flex h-full">
+  <div
+    class="border-light-lowest bg-light-low h-full w-44 rounded-md border p-1">
+    <nav aria-label="Sidebar">
+      <div
+        *ngFor="let mainMenu of mainMenus"
+        class="relative w-full items-center text-xs">
+        <ng-container *ngIf="!mainMenu.subMenus">
+          <a
+            class="hover:bg-primary-light relative block flex-1 cursor-pointer rounded-md px-5 py-2 hover:text-white"
+            [routerLink]="mainMenu.route"
+            routerLinkActive="text-white bg-primary-light">
+            <div>{{ mainMenu.name }}</div>
+          </a>
+        </ng-container>
+      </div>
+    </nav>
+  </div>
+  <div class="flex-1">
+    <router-outlet></router-outlet>
+  </div>
+</div>

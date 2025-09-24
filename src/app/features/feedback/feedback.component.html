@@ -1,0 +1,209 @@
+<div class="flex h-full flex-col md:flex-row">
+  <div class="w-full border-b border-gray-200 p-4 md:border-r lg:w-1/3">
+    <div class="flex flex-col space-y-4">
+      <div class="flex flex-col">
+        <div class="flex w-full flex-row items-center justify-between gap-2">
+          <h1 class="text-sm font-bold text-black uppercase">Attachment</h1>
+          <div class="flex gap-1">
+            <ng-container *ngFor="let button of actionButtons">
+              <button
+                *ngIf="button.id === 1"
+                type="button"
+                class="btn-high flex cursor-pointer rounded-md border border-gray-400 p-1 hover:bg-gray-100"
+                [pTooltip]="button.label"
+                (click)="button.action()">
+                <fc-svg-loader
+                  [path]="button.icon"
+                  [className]="'[&>svg]:size-4 text-gray-400'"></fc-svg-loader>
+              </button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="loadingAttachment" class="flex justify-center p-4">
+        <fc-loading></fc-loading>
+      </div>
+
+      <ng-container *ngIf="!loadingAttachment">
+        <div
+          class="ring-tertiary-200 relative mb-4 space-y-4 rounded-md bg-white p-4 text-sm text-gray-700 shadow-sm ring-1">
+          <div class="flex items-center justify-between">
+            <div
+              class="inline-flex items-center justify-center gap-1 rounded bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
+              <fa-icon [icon]="faClock" class="text-xs text-gray-500"></fa-icon>
+              <span>{{
+                attachment.created_at | date: 'd MMM y, hh:mm a'
+              }}</span>
+            </div>
+            <div
+              class="absolute top-3 right-2"
+              *ngIf="authUser.role !== userRoleEnum.CUSTOMER">
+              <button
+                type="button"
+                (click)="
+                  $event.stopPropagation();
+                  attachment.showMenu = !attachment.showMenu
+                "
+                class="h-8 w-8 cursor-pointer rounded-full p-2 text-gray-500 hover:bg-gray-100">
+                <fa-icon [icon]="faDot" class="text-black"></fa-icon>
+              </button>
+
+              <div
+                *ngIf="attachment.showMenu"
+                class="absolute right-0 z-10 mt-2 w-28 rounded-md border border-gray-200 bg-white shadow-lg">
+                <button
+                  type="button"
+                  (click)="
+                    attachment.showMenu = false;
+                    editAttachment();
+                    $event.stopPropagation()
+                  "
+                  class="block w-full cursor-pointer rounded-md px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">
+                  Edit
+                </button>
+                <button
+                  *ngIf="feedbacks.length === 0"
+                  type="button"
+                  (click)="deleteAttachment(); $event.stopPropagation()"
+                  class="block w-full cursor-pointer rounded-md px-3 py-2 text-left text-sm text-red-600 hover:bg-gray-100">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-1 text-sm text-gray-500">
+            <p>
+              Feature:
+              <span class="text-gray-700">{{ attachment.feature?.name }} </span>
+            </p>
+            <p class="whitespace-pre-line">
+              Note:
+              <span class="text-gray-700">{{ attachment.note || '-' }} </span>
+            </p>
+          </div>
+
+          <div *ngIf="authUser.role !== userRoleEnum.CUSTOMER">
+            <button
+              (click)="addAtatchmentFile()"
+              class="flex cursor-pointer items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-xs text-gray-600 hover:bg-gray-100">
+              <fa-icon [icon]="faPlus"></fa-icon>
+              Add File
+            </button>
+          </div>
+
+          <div
+            class="flex gap-2 overflow-x-auto sm:flex-wrap sm:overflow-visible">
+            <div
+              *ngFor="let file of attachment.attachment_files"
+              class="relative h-12 w-12 shrink-0 rounded-md border border-gray-300 bg-white p-1">
+              <fc-image-preview
+                *ngIf="isImage(file.url); else fileIcon"
+                [preview]="true"
+                [src]="file.url"
+                alt="Attachment File"
+                class="h-full w-full object-cover"></fc-image-preview>
+
+              <ng-template #fileIcon>
+                <a
+                  [href]="file.url"
+                  target="_blank"
+                  rel="noopener"
+                  (click)="$event.stopPropagation()"
+                  class="flex h-full w-full items-center justify-center">
+                  <fa-icon
+                    [icon]="getFileIcon(file.url || '')"
+                    class="text-xl text-gray-500">
+                  </fa-icon>
+                </a>
+              </ng-template>
+
+              <ng-container *ngIf="authUser.role !== userRoleEnum.CUSTOMER">
+                <fa-icon
+                  [icon]="faTrash"
+                  class="absolute top-1 right-1 z-10 cursor-pointer text-sm text-red-500"
+                  (click)="
+                    deleteAttachmentFile(attachment.id, file.id);
+                    $event.stopPropagation()
+                  "></fa-icon>
+              </ng-container>
+            </div>
+          </div></div
+      ></ng-container>
+    </div>
+  </div>
+
+  <div class="relative flex h-full w-full flex-col space-y-4 lg:w-2/3">
+    <div class="flex flex-col p-4 pb-0">
+      <div class="flex w-full flex-row items-center justify-between gap-2">
+        <h1 class="text-sm font-bold text-black uppercase">Feedback</h1>
+        <div class="flex gap-1">
+          <ng-container *ngFor="let button of actionButtons">
+            <button
+              *ngIf="button.id === 2"
+              type="button"
+              class="btn-high flex cursor-pointer rounded-md border border-gray-400 p-1 hover:bg-gray-100"
+              [pTooltip]="button.label"
+              (click)="button.action()">
+              <fc-svg-loader
+                [path]="button.icon"
+                [className]="'[&>svg]:size-4 text-gray-400'"></fc-svg-loader>
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="loadingFeedback" class="flex justify-center p-4">
+      <fc-loading></fc-loading>
+    </div>
+
+    <div *ngIf="!loadingFeedback" class="flex-1 overflow-y-auto px-4 pb-28">
+      <div *ngIf="feedbacks.length > 0; else noFeedback">
+        <div
+          *ngFor="let feedback of feedbacks"
+          class="mb-4"
+          [ngClass]="{ 'text-right': feedback.sender?.id === user?.id }">
+          <div
+            [ngClass]="{
+              'bg-blue-100 text-blue-900': feedback.sender?.id === user?.id,
+              'bg-gray-100 text-gray-800': feedback.sender?.id !== user?.id,
+            }"
+            class="inline-block max-w-sm rounded-md px-4 py-2 shadow-sm">
+            <p
+              *ngIf="feedback.sender?.id !== user?.id"
+              class="text-xs font-semibold">
+              {{ feedback.sender?.name }} - {{ feedback.sender?.role_name }}
+            </p>
+            <p class="mt-1 text-left text-sm">
+              {{ feedback.message }}
+            </p>
+            <p class="mt-1 text-left text-xs text-gray-400">
+              {{ feedback.created_at | date: 'd MMM y, hh:mm a' }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noFeedback>
+        <fc-not-found text="No feedback found"></fc-not-found>
+      </ng-template>
+    </div>
+
+    <div class="sticky bottom-0 border-t border-gray-200 bg-white p-3">
+      <form [formGroup]="feedbackForm" (ngSubmit)="submit()" class="flex gap-2">
+        <input
+          type="text"
+          formControlName="message"
+          placeholder="Write a feedback..."
+          class="placeholder:text-tertiary-400 flex-grow rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none" />
+        <button
+          type="submit"
+          class="rounded bg-sky-600 px-4 py-2 text-white transition hover:bg-sky-700">
+          <fa-icon [fixedWidth]="true" [icon]="faSend"></fa-icon>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
