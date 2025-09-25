@@ -35,7 +35,7 @@ export class SidebarComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private layoutService: LayoutService,
-    private router: Router
+    public router: Router
   ) {
     this.mainMenus = this.layoutService.getRoutes();
     this.mainMenus.forEach((menu: any) => {
@@ -86,5 +86,12 @@ export class SidebarComponent implements OnInit {
 
   get hasVisibleMenuWithSequence(): boolean {
     return this.menuWithSequence.some((menu) => menu.visible);
+  }
+
+  isActive(route: string): boolean {
+    if (route === '/project' && this.router.url.startsWith('/feedback')) {
+      return true;
+    }
+    return this.router.url.startsWith(route);
   }
 }

@@ -31,11 +31,13 @@
             <a
               class="relative flex flex-1 cursor-pointer items-center gap-2 rounded-lg px-3 py-2 transition-colors duration-100 hover:bg-sky-700 hover:fill-white hover:text-white"
               [routerLink]="mainMenu.route"
-              [routerLinkActiveOptions]="{ exact: false }"
-              routerLinkActive="fill-white text-white bg-sky-600"
-              (click)="toggleSidebar()">
-              <fc-svg-loader [path]="mainMenu.icon" className="[&>svg]:size-4">
-              </fc-svg-loader>
+              (click)="toggleSidebar()"
+              [ngClass]="{
+                'bg-sky-600 fill-white text-white': isActive(mainMenu.route),
+              }">
+              <fc-svg-loader
+                [path]="mainMenu.icon"
+                className="[&>svg]:size-4"></fc-svg-loader>
               <div class="md:hidden lg:block">{{ mainMenu.name }}</div>
             </a>
           </ng-container>
