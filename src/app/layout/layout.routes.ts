@@ -14,7 +14,7 @@ export const layoutRoutes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: '',
         pathMatch: 'full',
       },
       {

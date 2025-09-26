@@ -25,7 +25,7 @@ export class FcImagePreviewComponent {
   isError = false;
 
   @Input() src: string = '';
-  @Input() srcError: string = '/images/placeholders/image.png';
+  @Input() srcError: string = '/assets/images/placeholders/image.png';
   @Input() alt: string = '';
   @Input() width: string = '';
   @Input() height: string = '';

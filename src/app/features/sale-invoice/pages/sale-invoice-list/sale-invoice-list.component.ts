@@ -57,7 +57,7 @@ export class SaleInvoiceListComponent {
     {
       id: 1,
       label: 'Add Sale Invoice',
-      icon: 'images/icons/add.svg',
+      icon: '/assets/images/icons/add.svg',
       route: ['/sale-invoice/add'],
       action: () => {},
       hidden: true,
@@ -65,7 +65,7 @@ export class SaleInvoiceListComponent {
     {
       id: 2,
       label: 'Refresh',
-      icon: '/images/icons/refresh.svg',
+      icon: '/assets/images/icons/refresh.svg',
       styleClass: 'border border-gray-400',
       active: false,
       action: () => {

@@ -15,7 +15,7 @@
       </div>
       <div class="flex flex-row items-center justify-center gap-2">
         <img
-          src="images/logos/dark-logo.png"
+          src="assets/images/logos/dark-logo.png"
           alt=""
           class="h-8 flex-none object-contain object-left drop-shadow-lg" />
         <h3 class="hidden text-lg font-medium text-black @sm:text-xl @md:block">
@@ -44,7 +44,7 @@
           class="fc-animate-translate-up text-2xs flex h-8 w-8 cursor-pointer overflow-hidden rounded-full border border-white bg-white text-black">
           <fa-icon *ngIf="false" [icon]="faUser"></fa-icon>
           <img
-            [src]="user.url ? user.url : '/images/icons/user-placeholder.svg'"
+            [src]="user.url ? user.url : '/assets/images/icons/user-placeholder.svg'"
             class="aspect-square object-cover" />
         </button> -->
         <button
@@ -71,7 +71,9 @@
           <fa-icon [icon]="faChevronLeft" [fixedWidth]="true"></fa-icon>
         </button>
         <fc-image-preview
-          [src]="user.url ? user.url : '/images/icons/user-placeholder.svg'"
+          [src]="
+            user.url ? user.url : '/assets/images/icons/user-placeholder.svg'
+          "
           class="[&>.img]:size-8 [&>.img]:overflow-hidden [&>.img]:rounded"></fc-image-preview>
         <div>
           <p class="text-xs">{{ user.name }}</p>

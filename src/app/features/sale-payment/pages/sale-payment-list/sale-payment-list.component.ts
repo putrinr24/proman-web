@@ -56,7 +56,7 @@ export class SalePaymentListComponent {
     {
       id: 1,
       label: 'Refresh',
-      icon: '/images/icons/refresh.svg',
+      icon: '/assets/images/icons/refresh.svg',
       styleClass: 'border border-gray-400',
       active: false,
       action: () => {

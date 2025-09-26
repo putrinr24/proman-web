@@ -9,7 +9,7 @@ import { AnimationItem } from 'lottie-web';
 })
 export class FcLoadingComponent {
   lottieOption = {
-    path: `/images/lotties/loading.json`,
+    path: `/assets/images/lotties/loading.json`,
     loop: true,
   };
   @Input() mode = 'normal';

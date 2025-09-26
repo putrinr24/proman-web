@@ -40,7 +40,7 @@ export class UserViewComponent {
     {
       id: 1,
       label: 'Refresh',
-      icon: '/images/icons/refresh.svg',
+      icon: '/assets/images/icons/refresh.svg',
       action: () => {
         this.refresh();
       },
@@ -104,7 +104,7 @@ export class UserViewComponent {
       .getUser(this.user.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe((res: any) => {
-        (this.user = {
+        ((this.user = {
           ...res.data,
         }),
           this.userForm.patchValue({
@@ -116,7 +116,7 @@ export class UserViewComponent {
             password: this.user.password,
             address: this.user.address,
             is_verified: this.user.is_verified,
-          });
+          }));
         this.loading = false;
       });
     this.userService.getUserRoles().subscribe({

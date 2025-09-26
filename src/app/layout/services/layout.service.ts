@@ -81,7 +81,7 @@ export class LayoutService {
       {
         route: '/dashboard',
         name: 'Dashboard',
-        icon: '/images/icons/dashboard-menu.svg',
+        icon: '/assets/images/icons/dashboard-menu.svg',
         sequence: 1,
         // visible: [
         //   UserRoleEnum.OWNER,
@@ -93,7 +93,7 @@ export class LayoutService {
       {
         route: '/user',
         name: 'User',
-        icon: '/images/icons/user-menu.svg',
+        icon: '/assets/images/icons/user-menu.svg',
         visible: [UserRoleEnum.OWNER, UserRoleEnum.PROJECT_MANAGER].includes(
           this.authUser.role
         ),
@@ -101,7 +101,7 @@ export class LayoutService {
       {
         route: '/project',
         name: 'Project',
-        icon: '/images/icons/project-menu.svg',
+        icon: '/assets/images/icons/project-menu.svg',
         visible: [
           UserRoleEnum.OWNER,
           UserRoleEnum.PROJECT_MANAGER,
@@ -112,7 +112,7 @@ export class LayoutService {
       {
         route: '/template',
         name: 'Template',
-        icon: '/images/icons/template-menu.svg',
+        icon: '/assets/images/icons/template-menu.svg',
         visible: [UserRoleEnum.OWNER, UserRoleEnum.PROJECT_MANAGER].includes(
           this.authUser.role
         ),
@@ -120,7 +120,7 @@ export class LayoutService {
       {
         route: '/sale-invoice',
         name: 'Sale Invoice',
-        icon: '/images/icons/invoice-menu.svg',
+        icon: '/assets/images/icons/invoice-menu.svg',
         visible: [UserRoleEnum.OWNER, UserRoleEnum.CUSTOMER].includes(
           this.authUser.role
         ),
@@ -128,7 +128,7 @@ export class LayoutService {
       {
         route: '/sale-payment',
         name: 'Sale Payment',
-        icon: '/images/icons/payment-menu.svg',
+        icon: '/assets/images/icons/payment-menu.svg',
         visible: [UserRoleEnum.OWNER].includes(this.authUser.role),
       },
     ];

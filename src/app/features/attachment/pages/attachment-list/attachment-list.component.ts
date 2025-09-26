@@ -50,7 +50,7 @@ export class AttachmentListComponent {
     {
       id: 1,
       label: 'Add Attachment',
-      icon: 'images/icons/add.svg',
+      icon: '/assets/images/icons/add.svg',
       roles: [0, 1, 2],
       action: () => {
         this.addAttachment();
@@ -59,7 +59,7 @@ export class AttachmentListComponent {
     {
       id: 2,
       label: 'Refresh',
-      icon: '/images/icons/refresh.svg',
+      icon: '/assets/images/icons/refresh.svg',
       roles: [0, 1, 2, 3],
       action: () => {
         this.refresh();

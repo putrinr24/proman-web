@@ -50,7 +50,7 @@ export class FcToastComponent {
             if (toast.severity) {
               if (!toast.lottieOption) {
                 toast.lottieOption = {
-                  path: `/images/lotties/${toast.severity}.json`,
+                  path: `/assets/images/lotties/${toast.severity}.json`,
                   loop: false,
                 };
               }
