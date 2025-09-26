@@ -15,7 +15,7 @@ interface TableColumn {
 })
 export class FcTableComponent {
   lottieOption = {
-    path: `/assets/images/lotties/notFound.json`,
+    path: `./assets/images/lotties/notFound.json`,
     loop: true,
     autoplay: true,
   };
