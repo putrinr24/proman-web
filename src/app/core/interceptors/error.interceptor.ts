@@ -60,7 +60,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             header: 'Login',
             message: 'Email or password is incorrect',
             lottieOption: {
-              path: '/assets/images/lotties/warning.json',
+              path: './assets/images/lotties/warning.json',
               loop: false,
             },
           });

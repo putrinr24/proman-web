@@ -57,7 +57,7 @@ export class TemplateListComponent {
     {
       id: 1,
       label: 'Add Template',
-      icon: '/assets/images/icons/add.svg',
+      icon: './assets/images/icons/add.svg',
       styleClass: 'border border-gray-400',
       route: ['/template/add'],
       action: () => {},
@@ -67,7 +67,7 @@ export class TemplateListComponent {
     {
       id: 2,
       label: 'Refresh',
-      icon: '/assets/images/icons/refresh.svg',
+      icon: './assets/images/icons/refresh.svg',
       styleClass: 'border border-gray-400',
       active: false,
       action: () => {

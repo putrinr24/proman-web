@@ -40,7 +40,7 @@ export class UserViewComponent {
     {
       id: 1,
       label: 'Refresh',
-      icon: '/assets/images/icons/refresh.svg',
+      icon: './assets/images/icons/refresh.svg',
       action: () => {
         this.refresh();
       },

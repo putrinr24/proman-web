@@ -64,14 +64,14 @@ export class ProjectListComponent {
     {
       id: 1,
       label: 'Add Project',
-      icon: '/assets/images/icons/add.svg',
+      icon: './assets/images/icons/add.svg',
       action: () => this.openAddProjectOptions(),
       hidden: true,
     },
     {
       id: 2,
       label: 'Refresh',
-      icon: '/assets/images/icons/refresh.svg',
+      icon: './assets/images/icons/refresh.svg',
       styleClass: 'border border-gray-400',
       active: false,
       action: () => {

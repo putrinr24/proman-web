@@ -37,7 +37,7 @@ export class SalePaymentViewComponent {
     {
       id: 1,
       label: 'Refresh',
-      icon: '/assets/images/icons/refresh.svg',
+      icon: './assets/images/icons/refresh.svg',
       action: () => {
         this.loadData();
       },
@@ -48,7 +48,7 @@ export class SalePaymentViewComponent {
     {
       id: 1,
       label: 'Approve',
-      icon: '/assets/images/icons/check-square.svg',
+      icon: './assets/images/icons/check-square.svg',
       action: () => {
         this.approve();
       },
@@ -57,7 +57,7 @@ export class SalePaymentViewComponent {
     {
       id: 2,
       label: 'Reject',
-      icon: '/assets/images/icons/times-square.svg',
+      icon: './assets/images/icons/times-square.svg',
       action: () => {
         this.cancel();
       },
@@ -66,7 +66,7 @@ export class SalePaymentViewComponent {
     {
       id: 3,
       label: 'Delete',
-      icon: '/assets/images/icons/trash-bin.svg',
+      icon: './assets/images/icons/trash-bin.svg',
       action: () => {
         this.delete();
       },

@@ -54,7 +54,7 @@ export class UserListComponent {
     {
       id: 1,
       label: 'Add User',
-      icon: '/assets/images/icons/add.svg',
+      icon: './assets/images/icons/add.svg',
       route: ['/user/add'],
       action: () => {},
       hidden: true,
@@ -62,7 +62,7 @@ export class UserListComponent {
     {
       id: 2,
       label: 'Refresh',
-      icon: '/assets/images/icons/refresh.svg',
+      icon: './assets/images/icons/refresh.svg',
       styleClass: 'border border-gray-400',
       active: false,
       action: () => {

@@ -57,7 +57,7 @@ export class FeedbackComponent {
     {
       id: 1,
       label: 'Refresh Attachment',
-      icon: '/assets/images/icons/refresh.svg',
+      icon: './assets/images/icons/refresh.svg',
       action: () => {
         this.refreshAttachment();
       },
@@ -65,7 +65,7 @@ export class FeedbackComponent {
     {
       id: 2,
       label: 'Refresh Feedback',
-      icon: '/assets/images/icons/refresh.svg',
+      icon: './assets/images/icons/refresh.svg',
       action: () => {
         this.refreshFeedback();
       },

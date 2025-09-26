@@ -89,7 +89,7 @@ export class SaleInvoiceViewComponent {
   faTrash = faTrash;
 
   lottieOption = {
-    path: '/assets/images/lotties/payment-sucess.json',
+    path: './assets/images/lotties/payment-sucess.json',
     loop: false,
     autoplay: true,
   };
@@ -99,7 +99,7 @@ export class SaleInvoiceViewComponent {
     {
       id: 1,
       label: 'Refresh',
-      icon: '/assets/images/icons/refresh.svg',
+      icon: './assets/images/icons/refresh.svg',
       action: () => {
         this.refresh();
       },
@@ -108,7 +108,7 @@ export class SaleInvoiceViewComponent {
     {
       id: 2,
       label: 'Delete',
-      icon: '/assets/images/icons/trash.svg',
+      icon: './assets/images/icons/trash.svg',
       action: () => {
         this.deleteInvoice(this.saleInvoice.id);
       },
