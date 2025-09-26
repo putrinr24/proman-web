@@ -1,0 +1,1 @@
+import{D as a,K as m}from"./chunk-Q7I35MCF.js";import{$a as n,xb as o}from"./chunk-MH3Z5DCJ.js";var p=class t{static \u0275fac=function(e){return new(e||t)};static \u0275cmp=n({type:t,selectors:[["app-sale-payment"]],decls:1,vars:0,template:function(e,i){e&1&&o(0,"router-outlet")},dependencies:[m,a],encapsulation:2})};export{p as a};
